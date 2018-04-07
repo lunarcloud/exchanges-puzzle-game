@@ -1,6 +1,7 @@
 
 class Menu {
-	constructor(){
-		console.debug("Created menu controller.");
+	constructor() {
+		this.puzzle = new Puzzle();
+		console.debug("Created Menu Controller.");
 	}
 };
