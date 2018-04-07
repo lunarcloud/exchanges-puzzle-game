@@ -36,7 +36,7 @@
 			overflow: hidden;
 		}
 
-		body > * {
+		body > :not(script) {
 			position: absolute;
 			left: 50%;
 			top: 50%;
@@ -44,29 +44,80 @@
 			display: block;
 		}
 
-		main {
+		body > menu {
 			text-align: center;
+			visibility: visible;
 		}
 
 		#continue-button {
 			display: none;
 		}
 
-		game {
-			display: none;
+		body > game {
+			visibility: hidden;
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			flex-direction: row;
+		}
+		body > game > aside {
+			width: fit-contents;
+			display: flex;
+			flex-direction: column;
+			padding: 2%;
+		}
+		body > game > table {
+			height: 100vh;
+			flex-grow: 1;
 		}
     </style>
   </head>
   <body>
-	<main>
+	<menu>
 		<h1>Exchanges: Puzzle Game</h1>
 		<button id="start-button">Begin</button>
 		<button id="continue-button">Continue</button>
-	</main>
+	</menu>
 	<game>
+		<aside>
+			<h2>Focus</h2>
+			<section id="focus">
+			</section>
+			<h2>Goal</h2>
+			<section id="goal">
+			</section>
+		</aside>
+		<table>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
 	</game>
-	<script src="js/puzzle.js"></script>
-	<script src="js/menu.js"></script>
-	<script > var menu = new Menu(); </script>
   </body>
+  <script src="js/puzzle.js"></script>
+  <script src="js/menu.js"></script>
+  <script defer>
+	var menu = new Menu();
+  </script>
 </html>
