@@ -1,0 +1,40 @@
+{
+    "main": "index.html",
+    "offline_enabled": true,
+    "display": "fullscreen",
+    "orientation": "landscape",
+    "nodejs": false,
+    "name": "exchanges-puzzle-game",
+    "version": "0.0.1",
+    "app_name": "Exchanges: Puzzle Game",
+    "app_name_short": "exchanges-puzzle-game",
+    "app_company": "Samuel Sarette",
+    "app_company_short": "ssarette",
+    "app_description" : "Puzzle game of swapping items and meeting character needs.",
+    "package_maintainer": "Samuel Sarette <samuelsarette@linux.com>",
+    "app_homepage": "https://github.com/lunarcloud/exchanges-puzzle-game",
+    "background_color": "#222222",
+    "theme_color": "#222222",
+    "window": {
+        "title": "Exchanges: Puzzle Game",
+        "position": "center",
+        "fullscreen": false,
+        "transparent": false,
+        "resizable": true,
+        "height": 720,
+        "width": 1280,
+        "icon": "media/icons/exchanges-puzzle-game-512.png",
+        "mac_icon": "media/icons/exchanges-puzzle-game-512.png",
+        "exe_icon": "media/icons/exchanges-puzzle-game-512.png"
+    },
+    "webkit": {
+        "plugin": false,
+        "page-cache": false,
+        "java": false
+    },
+    "permissions": [
+      "storage",
+      "pointerLock",
+      "app.window.fullscreen"
+    ]
+}
