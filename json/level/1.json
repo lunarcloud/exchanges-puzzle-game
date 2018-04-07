@@ -1,24 +1,37 @@
 {
-	"title": "",
-	"goal": {
-		"text": "",
-		"item": ""
-	},
-	"map": [
-		[
-			{"empty": true},
-			{"empty": true},
-			{"empty": true}
-		],
-		[
-			{"empty": true},
-			{"empty": true},
-			{"empty": true}
-		],
-		[
-			{"empty": true},
-			{"empty": true},
-			{"empty": true}
-		]
-	]
+    "title": "Simple Exchange",
+    "goal": {
+        "text": "Pay the Spy off for information",
+        "item": {
+            "name": "letter",
+            "icon": "letter"
+        }
+    },
+    "map": [
+        [
+            {"empty": true},
+            {
+                "type": "item",
+                "name": "money",
+                "icon": "money",
+                "empty": false
+            },
+            {"empty": true}
+        ],
+        [
+            {"empty": true},
+            {"empty": true},
+            {"empty": true}
+        ],
+        [
+            {
+                "type": "npc",
+                "name": "spy",
+                "icon": "spy",
+                "empty": false
+            },
+            {"empty": true},
+            {"empty": true}
+        ]
+    ]
 }
