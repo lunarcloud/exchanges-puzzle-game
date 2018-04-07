@@ -1,0 +1,24 @@
+{
+	"title": "",
+	"goal": {
+		"text": "",
+		"item": ""
+	},
+	"map": [
+		[
+			{"empty": true},
+			{"empty": true},
+			{"empty": true}
+		],
+		[
+			{"empty": true},
+			{"empty": true},
+			{"empty": true}
+		],
+		[
+			{"empty": true},
+			{"empty": true},
+			{"empty": true}
+		]
+	]
+}

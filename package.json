@@ -22,7 +22,7 @@
         "transparent": false,
         "resizable": true,
         "height": 720,
-        "width": 1280,
+        "width": 960,
         "icon": "media/icons/exchanges-puzzle-game-512.png",
         "mac_icon": "media/icons/exchanges-puzzle-game-512.png",
         "exe_icon": "media/icons/exchanges-puzzle-game-512.png"
