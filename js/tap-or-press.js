@@ -1,25 +1,36 @@
 
 class TapOrHoldHandler {
-    constructor (node, onTap, onHold, onRelease) {
+    constructor (ignoreDialogOut) {
 
-        this.onTap = typeof(onTap) == "function" ? onTap : e => {};
-        this.onHold = typeof(onHold) == "function" ? onHold : e => {};
-        this.onRelease = typeof(onRelease) == "function" ? onRelease : e => {};
+        this.clear();
 
+        this.ignoreDialogOut = ignoreDialogOut || true;
         this.holdTime = 1000;
         this.releaseCooldown = 300;
-        this.holding = false;
+        this.holding = null;
         this.presstimer = null;
-        this.node = node;
 
-        node.addEventListener("click", e => this.click(e), {passive: true});
-        node.addEventListener("mousedown", e => this.start(e), {passive: true});
-        node.addEventListener("touchstart", e => this.start(e), {passive: true});
-        node.addEventListener("mouseout", e => this.cancel(e), {passive: true});
-        node.addEventListener("mouseup", e => this.cancel(e), {passive: true});
-        node.addEventListener("touchend", e => this.cancel(e), {passive: true});
-        node.addEventListener("touchleave", e => this.cancel(e), {passive: true});
-        node.addEventListener("touchcancel", e => this.cancel(e), {passive: true});
+        document.addEventListener("click", e => this.click(e), {passive: true});
+        document.addEventListener("mousedown", e => this.start(e), {passive: true});
+        document.addEventListener("touchstart", e => this.start(e), {passive: true});
+        document.addEventListener("mouseout", e => this.cancel(e), {passive: true});
+        document.addEventListener("mouseup", e => this.cancel(e), {passive: true});
+        document.addEventListener("touchend", e => this.cancel(e), {passive: true});
+        document.addEventListener("touchleave", e => this.cancel(e), {passive: true});
+        document.addEventListener("touchcancel", e => this.cancel(e), {passive: true});
+    }
+
+    add(node, onTap, onHold, onRelease) {
+        if (typeof(onTap) == "function") this.onTap[node] = onTap;
+        if (typeof(onHold) == "function") this.onHold[node] = onHold;
+        if (typeof(onRelease) == "function") this.onRelease[node] = onRelease;
+    }
+
+    clear() {
+        this.onTap = {};
+        this.onHold = {};
+        this.onRelease = {};
+
     }
 
     click(e) {
@@ -27,24 +38,58 @@ class TapOrHoldHandler {
             clearTimeout(this.presstimer);
             this.presstimer = null;
         }
+        var handler = this;
+        var check = function(target) {
+            if (typeof(handler.onTap[target]) === "function") {
+                handler.onTap[target](target);
+                handler.holding = target;
+                return true;
+            }
+            return false;
+        };
+
         if (this.holding) return false;
-        else this.onTap(this.node);
+        else {
+            if ( check(e.target) ) return;
+            if ( check(e.target.parentElement) ) return;
+            if ( check(e.target.parentElement.parentElement) ) return;
+        }
     }
 
     start(e) {
         if (e.type === "click" && e.button !== 0) return;
 
+        this.holding = null;
+
         var handler = this;
-        this.holding = false;
+        var check = function(target) {
+            if (typeof(handler.onHold[target]) === "function") {
+                handler.onHold[target](target);
+                handler.holding = target;
+                return true;
+            }
+            return false;
+        };
+
         this.presstimer = setTimeout(function() {
-            handler.onHold(handler.node);
-            handler.holding = true;
+            if ( check(e.target) ) return;
+            if ( check(e.target.parentElement) ) return;
+            if ( check(e.target.parentElement.parentElement) ) return;
         }, this.holdTime);
         return false;
     }
 
 
     cancel(e) {
+        if (this.ignoreDialogOut && (e.type === "mouseout" || e.type === "touchleave")) {
+            var check = function(target) {
+                return target.tagName != "DIALOG";
+            };
+            if ( check(e.target) ) return;
+            if ( check(e.target.parentElement) ) return;
+            if ( check(e.target.parentElement.parentElement) ) return;
+        }
+
         if (this.presstimer !== null) {
             clearTimeout(this.presstimer);
             this.presstimer = null;
@@ -52,9 +97,9 @@ class TapOrHoldHandler {
         if (this.holding) {
             var handler = this;
             setTimeout(() => {
-                handler.holding = false;
+                handler.holding = null;
             }, this.releaseCooldown);
-            this.onRelease(this.node);
+            if (typeof(this.onRelease[this.holding]) === "function") this.onRelease[this.holding](this.holding);
         }
     }
 }

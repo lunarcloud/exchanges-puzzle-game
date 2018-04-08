@@ -11,10 +11,10 @@
         [
             {"empty": true},
             {
+                "empty": false,
                 "type": "item",
                 "name": "money",
-                "icon": "money",
-                "empty": false
+                "icon": "money"
             },
             {"empty": true}
         ],
@@ -25,10 +25,11 @@
         ],
         [
             {
+                "empty": false,
                 "type": "npc",
                 "name": "spy",
                 "icon": "spy",
-                "empty": false
+                "desire": "money"
             },
             {"empty": true},
             {"empty": true}

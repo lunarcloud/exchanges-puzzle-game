@@ -19,159 +19,18 @@
     <link href="media/icons/exchanges-puzzle-game.ico" rel="shortcut icon">
     <link rel="icon" sizes="512x512" href="media/icons/exchanges-puzzle-game-512.png">
     <link rel="icon" sizes="192x192" href="media/icons/exchanges-puzzle-game-192.png">
-
-    <style>
-        :root {
-            --system-font: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Noto Sans UI", "Roboto", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        }
-
-        body {
-            font-family: var(--system-font);
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            box-shadow: inset 0 0 20px 0px black;
-            background-color: #3f3f3f;
-            color: #eee;
-            overflow: hidden;
-        }
-
-        body > :not(script) {
-            position: absolute;
-            left: 50%;
-            top: 25%;
-            transform: translate(-50%, -25%);
-            display: block;
-        }
-
-        body > menu {
-            width: fit-content;
-            text-align: center;
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
-            z-index: 1;
-        }
-
-        #continue-button,
-        #quit-button {
-            display: none;
-        }
-
-        body > menu > button {
-            font-family: var(--system-font);
-            background-color: floralwhite;
-            color: black;
-            border-width: 4px;
-            border-style: outset;
-            padding: 6px 16px;
-            font-size: xx-large;
-        }
-
-        body > menu > button:active {
-            background-color: silver;
-            color: black;
-            border-style: inset;
-        }
-
-        body > game {
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            z-index: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: row;
-        }
-        body > game > aside {
-            width: 20vw;
-            max-width: 30vh;
-            display: flex;
-            flex-direction: column;
-            padding: 0 1%;
-        }
-
-        #goal, #focus {
-            text-align: center;
-            vertical-align: middle;
-            height: 30vh;
-        }
-
-        #goal *, #focus * {
-            display: block;
-        }
-
-        #goal img, #focus img {
-            min-width: 32px;
-            min-height: 32px;
-        }
-
-        body > game > main {
-            height: 100vh;
-            flex-grow: 1;
-        }
-
-        #map  {
-            width: 100%;
-            height: 100vh;
-            border-collapse: collapse;
-        }
-
-        #map td.item,
-        #map td.item *
-        {
-            cursor: pointer;
-            cursor: grab;
-            cursor: -webkit-grab;
-        }
-
-        #map td.item.focusing,
-        #map td.item.focusing *,
-        #map td.npc.focusing,
-        #map td.npc.focusing *
-        {
-            cursor: pointer;
-            cursor: grabbing;
-            cursor: -webkit-grabbing;
-        }
-
-        #map td.npc,
-        #map td.npc *
-        {
-            cursor: help;
-        }
-
-        #map td.npc.asking,
-        #map td.npc.asking *
-        {
-            cursor: crosshair;
-        }
-
-        #map td, #goal, #focus {
-            border-style: dashed;
-            border-color: #eee;
-            border-width: 2px;
-            box-shadow: inset 0 0 20px 0px black;
-        }
-
-        #map td {
-            position: relative;
-        }
-
-        #map td > a {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            display: block;
-        }
-    </style>
+    <link href="third-party/dialog-polyfill.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
   </head>
   <body>
     <menu>
-        <button id="start-button">Begin</button>
-        <button id="continue-button">Continue</button>
-        <button id="quit-button">Quit</button>
+        <button id="continue-button" class="hidden">►</button>
+        <button id="start-button">
+            <span class="first">►</span>
+            <span class="return">↺</span>
+        </button>
+        <button id="fullscreen-button">⤡</button>
+        <button id="quit-button" class="hidden">◼</button>
     </menu>
     <game>
         <aside>
@@ -210,12 +69,17 @@
                 </tr>
             </table>
         </main>
+        <dialog></dialog>
     </game>
   </body>
+  <script src="third-party/screenfull.min.js"></script>
+  <script src="third-party/dialog-polyfill.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/drag-and-drop.js"></script>
   <script src="js/tap-or-press.js"></script>
   <script src="js/puzzle.js"></script>
   <script src="js/menu.js"></script>
   <script defer>
-    var menu = new Menu();
+      var menu = new Menu();
   </script>
 </html>
