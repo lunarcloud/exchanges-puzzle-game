@@ -20,5 +20,16 @@ class Utils {
     fullscreenToggle() {
         screenfull.toggle();
     }
+
+    checkHereUp(element, check) {
+        while (element instanceof HTMLElement) {
+            if (check(element)) {
+                return true;
+            } else {
+                element = element.parentElement;
+            }
+        }
+        return false;
+    }
 }
 

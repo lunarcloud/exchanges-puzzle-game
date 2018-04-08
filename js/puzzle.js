@@ -1,9 +1,13 @@
 
 class Puzzle {
     constructor(levelDefinition) {
-        if (typeof(levelDefinition) !== "object") {
-            throw "level definition missing!";
-        }
+        console.debug("Created Puzzle Controller");
+    }
+
+    load(levelDefinition) {
+
+        if (typeof(levelDefinition) !== "object") throw "level definition missing!";
+        this.originalDefinition = levelDefinition;
 
         this.goalElement = document.getElementById("goal");
         this.focusDisplay = document.getElementById("focus");
@@ -18,7 +22,7 @@ class Puzzle {
         this.goal = levelDefinition.goal;
         this.map = levelDefinition.map;
 
-        this.goalElement.innerHTML = '<img src="media/sprites/item/' + this.goal.icon + '.png">'
+        this.goalElement.innerHTML = '<img src="media/sprites/item/' + this.goal.name + '.png">'
         + '<label>' + this.goal.text + '</label>';
         this.focusDisplay.innerHTML = ''; // clear
         this.mapElement.innerHTML = ''; // clear
@@ -28,10 +32,12 @@ class Puzzle {
             mapHTML += '<tr>';
             for (var j = 0; j < this.map[i].length; j++) {
                 let cell = this.map[i][j];
-                mapHTML += '<td class="' + cell.type + '" type="' + cell.type + '" name="' + cell.name + '" icon="' + cell.icon + '">';
-                if (cell.empty === false) {
-                    mapHTML += '<a class="' + cell.type + '">'
-                        + '<img src="media/sprites/' + cell.type + '/' + cell.icon + '.png">'
+                if (cell.empty) {
+                    mapHTML += '<td>';
+                } else {
+                    mapHTML += '<td class="' + cell.type + '" type="' + cell.type + '" name="' + cell.name + '" desire="' + (cell.desire ? cell.desire : '')  + '" gives="' + (cell.gives ? cell.gives : '')  + '">'
+                    + '<a class="' + cell.type + '">'
+                        + '<img src="media/sprites/' + cell.type + '/' + cell.name + '.png">'
                         + '<label>' + cell.name + '</label>'
                         + '</a>';
                 }
@@ -41,9 +47,10 @@ class Puzzle {
         }
         this.mapElement.innerHTML = mapHTML;
 
-        var tableCells = document.querySelectorAll("#map td");
         this.tapOrHoldHandler = new TapOrHoldHandler(true);
         this.dragAndDropHandler = new DragAndDropHandler();
+
+        var tableCells = document.querySelectorAll("#map td");
         for (var i = 0; i < tableCells.length; i++) {
             tableCells[i].id = "table-cell-" + i;
             this.tapOrHoldHandler.add(
@@ -55,13 +62,11 @@ class Puzzle {
             this.dragAndDropHandler.add(
                 tableCells[i],
                 tableCells[i].getAttribute("type") == "item",
-                node => {
-                    this.focus(node);
-                    this.combine(node);
-                }
+                node => this.focus(node),
+                node => this.combine(node)
             );
         }
-        console.debug("Created Puzzle Controller");
+        console.debug("Loaded Puzzle: " + this.title);
     }
 
     focusOrCombine(node) {
@@ -77,7 +82,8 @@ class Puzzle {
     focus(node) {
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
-        let icon = node.getAttribute("icon");
+
+        if (type != "item") return;
 
         if (node == this.focusTarget) return;
         console.debug("Focus: " + type + " | " + name);
@@ -88,27 +94,41 @@ class Puzzle {
         node.classList.add("focusing");
         setTimeout(() => requestAnimationFrame(() => node.classList.remove("focusing")), 300);
 
-        this.focusDisplay.innerHTML = '<img src="media/sprites/item/' + icon + '.png">'
+        this.focusDisplay.innerHTML = '<img src="media/sprites/item/' + name + '.png">'
             + '<label>' + name + '</label>';
     }
 
     combine(node) {
-        if (this.focusTarget === null) return;
+        if (this.focusTarget === null || node == this.focusTarget) return;
+        // TODO Combination logic
+
+        let focusName = this.focusTarget.getAttribute("name");
+
+        let name = node.getAttribute("name");
+        let type = node.getAttribute("type");
+        let desire = node.getAttribute("desire");
+        let gives = node.getAttribute("gives");
+
+        if (desire == focusName) {
+            console.debug("Combine " + name + " with " + focusName + ". Dropping " + gives + ".");
+        }
 
         this.focusTarget = null;
         this.focusDisplay.innerHTML = ""; // clear
-        // TODO Combination logic
     }
 
     ask(node) {
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
-        let icon = node.getAttribute("icon");
+        let desire = node.getAttribute("desire");
         if (type !== "npc") return;
 
         console.debug("Ask: " + type + " | " + name);
 
         // TODO fill in modal content
+        this.dialog.innerHTML = '<h2>Wants</h2>'
+            + '<img src="media/sprites/item/' + desire + '.png">'
+            + '<label>' + desire + '</label>';
 
         this.dialog.showModal();
         requestAnimationFrame(() => node.classList.add("asking"));
@@ -117,7 +137,6 @@ class Puzzle {
     clearAsk(node) {
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
-        let icon = node.getAttribute("icon");
         console.debug("Clear Ask: " + type + " | " + name);
         this.dialog.close();
         requestAnimationFrame(() => {

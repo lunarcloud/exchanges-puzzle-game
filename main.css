@@ -21,6 +21,14 @@ body {
     user-select: none;
 }
 
+body.busy {
+    cursor: wait !important;
+}
+
+body.no-cursor {
+    cursor: none !important;
+}
+
 body > :not(script) {
     position: absolute;
     left: 50%;
@@ -30,11 +38,20 @@ body > :not(script) {
 }
 
 body > menu {
-    width: fit-content;
-    text-align: center;
     opacity: 1;
     transition: opacity 1s ease-in-out;
     z-index: 1;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+body > menu > * {
+    flex-grow: 1;
+    margin: 2vh 2vw;
+    padding: 5vw 10vw;
+    font-size: 10vw;
 }
 
 #start-button:not(.returning) > .return,
@@ -42,17 +59,15 @@ body > menu {
     display: none;
 }
 
-body > menu > button {
+.big-button {
     font-family: var(--system-font);
     background-color: floralwhite;
     color: black;
-    border-width: 4px;
+    border-width: 1%;
     border-style: outset;
-    padding: 6px 16px;
-    font-size: xx-large;
 }
 
-body > menu > button:active {
+.big-button:active {
     background-color: silver;
     color: black;
     border-style: inset;
@@ -77,16 +92,45 @@ body > game > aside {
     max-width: 30vh;
     display: flex;
     flex-direction: column;
-    padding: 0 1%;
+    padding-right: 1%;
+    padding-left: 4px;
 }
 
-body > game > aside h2 {
+body > game > aside h2,
+dialog h2 {
     text-align: center;
     margin: 0;
 }
 
 body > game > aside h2:not(:first-child) {
     margin-top: 20px;
+}
+
+body > game > aside > section:last-child {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+body > game > aside > section:last-child > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    margin-bottom: 8px;
+}
+
+body > game > aside > section:last-child > div > * {
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin-right: 6px;
+    margin-top: 6px;
+    width: fit-content;
+}
+
+body > game > aside > section:last-child .big-button {
+    padding: 4% 10%;
+    font-size: 4vh;
 }
 
 #goal, #focus {
@@ -99,9 +143,12 @@ body > game > aside h2:not(:first-child) {
     display: block;
 }
 
-#goal img, #focus img {
+#goal img, #focus img, #map img, dialog img {
     min-width: 32px;
     min-height: 32px;
+}
+#goal label, #focus label, #map label, dialog label {
+    display: block;
 }
 
 body > game > main {

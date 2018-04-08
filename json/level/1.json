@@ -2,10 +2,7 @@
     "title": "Simple Exchange",
     "goal": {
         "text": "Pay the Spy off for information",
-        "item": {
-            "name": "letter",
-            "icon": "letter"
-        }
+        "name": "letter"
     },
     "map": [
         [
@@ -13,8 +10,7 @@
             {
                 "empty": false,
                 "type": "item",
-                "name": "money",
-                "icon": "money"
+                "name": "money"
             },
             {"empty": true}
         ],
@@ -28,8 +24,8 @@
                 "empty": false,
                 "type": "npc",
                 "name": "spy",
-                "icon": "spy",
-                "desire": "money"
+                "desire": "money",
+                "gives": "info"
             },
             {"empty": true},
             {"empty": true}
