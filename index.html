@@ -24,13 +24,9 @@
   </head>
   <body>
     <menu>
-        <button id="continue-button" class="big-button hidden">►</button>
-        <button id="start-button" class="big-button">
-            <span class="first">►</span>
-            <span class="return">↺</span>
-        </button>
-        <button id="fullscreen-button" class="big-button">⤡</button>
-        <button id="quit-button" class="big-button hidden">◼</button>
+        <h1>Select Level</h1>
+        <ol id="level-list"></ol>
+        <button id="fullscreen-button" class="big-button">▣</button>
     </menu>
     <game>
         <aside>
@@ -39,8 +35,8 @@
             <h2>Goal</h2>
             <section id="goal"></section>
             <section>
+                <button id="fullscreen-button2" class="big-button">▣</button>
                 <button id="back-to-menu-button" class="big-button">↶</button>
-                <button id="fullscreen-button2" class="big-button">⤡</button>
             </section>
         </aside>
         <main>
@@ -56,7 +52,5 @@
   <script src="js/tap-or-press.js"></script>
   <script src="js/puzzle.js"></script>
   <script src="js/menu.js"></script>
-  <script defer>
-      var menu = new Menu();
-  </script>
+  <script defer> var menu = new Menu();</script>
 </html>
