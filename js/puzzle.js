@@ -130,8 +130,12 @@ class Puzzle {
             + '<img src="media/sprites/item/' + desire + '.png">'
             + '<label>' + desire + '</label>';
 
-        this.dialog.showModal();
-        requestAnimationFrame(() => node.classList.add("asking"));
+        try{
+            this.dialog.showModal();
+            requestAnimationFrame(() => node.classList.add("asking"));
+        } catch(error) {
+            // not important
+        }
     }
 
     clearAsk(node) {
