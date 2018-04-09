@@ -1,9 +1,6 @@
 {
     "title": "Simple Exchange",
-    "goal": {
-        "text": "Pay the Spy off for information",
-        "name": "letter"
-    },
+    "goal": "letter",
     "map": [
         [
             {"empty": true},

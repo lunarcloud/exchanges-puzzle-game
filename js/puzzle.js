@@ -22,8 +22,8 @@ class Puzzle {
         this.goal = levelDefinition.goal;
         this.map = levelDefinition.map;
 
-        this.goalElement.innerHTML = '<img src="media/sprites/item/' + this.goal.name + '.png">'
-        + '<label>' + this.goal.text + '</label>';
+        this.goalElement.innerHTML = '<img src="media/sprites/item/' + this.goal + '.png">'
+        + '<label>' + this.goal + '</label>';
         this.focusDisplay.innerHTML = ''; // clear
         this.mapElement.innerHTML = ''; // clear
 
