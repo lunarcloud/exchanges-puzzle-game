@@ -21,10 +21,8 @@
         "fullscreen": false,
         "transparent": false,
         "resizable": true,
-        "width": 768,
-        "height": 560,
-        "min_width": 640,
-        "min_height": 440,
+        "width": 640,
+        "height": 480,
         "icon": "media/icons/exchanges-puzzle-game-512.png",
         "mac_icon": "media/icons/exchanges-puzzle-game-512.png",
         "exe_icon": "media/icons/exchanges-puzzle-game-512.png"
