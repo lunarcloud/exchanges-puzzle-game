@@ -86,6 +86,8 @@ body > menu > #fullscreen-button {
     padding: 2vh 3vh;
     width: fit-content;
     height: fit-content;
+    width: -moz-fit-content;
+    height: -moz-fit-content;
     margin-bottom: 1vw;
     margin-left: 1vw;
 }
