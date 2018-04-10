@@ -3,7 +3,6 @@ class TapOrHoldHandler {
     constructor (ignoreDialogOut) {
 
         this.clear();
-        this.utils = new Utils();
 
         this.ignoreDialogOut = ignoreDialogOut || true;
         this.holdTime = 1000;
@@ -51,7 +50,7 @@ class TapOrHoldHandler {
 
         if (this.holding) return false;
         else {
-            this.utils.checkHereUp(e.target, check);
+            Utils.checkHereUp(e.target, check);
         }
     }
 
@@ -71,7 +70,7 @@ class TapOrHoldHandler {
         };
 
         this.presstimer = setTimeout(function() {
-            handler.utils.checkHereUp(e.target, check);
+            Utils.checkHereUp(e.target, check);
         }, this.holdTime);
         return false;
     }
@@ -82,7 +81,7 @@ class TapOrHoldHandler {
             var check = function(target) {
                 return target.tagName != "DIALOG";
             };
-            if (this.utils.checkHereUp(e.target, check)) return;
+            if (Utils.checkHereUp(e.target, check)) return;
         }
 
         if (this.presstimer !== null) {

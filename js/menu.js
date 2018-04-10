@@ -9,15 +9,14 @@ class Menu {
         this.backToMenuButton = document.getElementById("back-to-menu-button");
 
         this.puzzle = new Puzzle();
-        this.utils = new Utils();
         this.currentLevel = null;
 
         this.backToMenuButton.addEventListener("click", e => {
             this.currentLevel = null;
             this.show();
         });
-        this.fullscreenButton.addEventListener("click", e => this.utils.fullscreenToggle());
-        this.fullscreenButton2.addEventListener("click", e => this.utils.fullscreenToggle());
+        this.fullscreenButton.addEventListener("click", e => Utils.fullscreenToggle());
+        this.fullscreenButton2.addEventListener("click", e => Utils.fullscreenToggle());
 
         var menu = this;
         this.loadLevels().then(() => {
@@ -36,7 +35,6 @@ class Menu {
 
             console.debug("Created Menu Controller.");
         });
-
     }
 
     loadLevels() {
@@ -44,13 +42,18 @@ class Menu {
 
         var checkNextLevel = (index, listResolve, listReject) => {
             fetch("./json/level/" + index + ".json")
+            .then(function(r) {
+                if (!r.ok)  throw Error(r.status);
+                else return r;
+            })
             .then(r => {
-                if (r.status === 200) {
-                    return r.json().then(level => {
-                        this.levels.push(level);
-                        return checkNextLevel(index+1, listResolve, listReject);
-                    });
-                } if (r.status === 404) {
+                return r.json().then(level => {
+                    this.levels.push(level);
+                    return checkNextLevel(index+1, listResolve, listReject);
+                });
+            })
+            .catch(error => {
+                if (error.message == 404 || error.message == "Failed to fetch") {
                     listResolve();
                 } else {
                     alert("Couldn't load puzzle " + index + "!");
