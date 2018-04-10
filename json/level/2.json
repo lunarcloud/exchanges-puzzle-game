@@ -1,9 +1,6 @@
 {
 	"title": "",
-	"goal": {
-		"text": "",
-		"item": ""
-	},
+	"goal": "",
 	"map": [
 		[
 			{"empty": true},
