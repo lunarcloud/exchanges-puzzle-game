@@ -13,15 +13,14 @@ class Puzzle {
         console.debug("Created Puzzle Controller");
     }
 
-    generateCellHTML(data) {
-        if (data.empty) {
-            return '<td></td>';
+    generateCellHTML(id, data) {
+        if (typeof(data.type) !== "string") {
+            return '<td id="' + id + '"></td>';
         } else {
-            return '<td class="' + data.type + '" type="' + data.type + '" name="' + data.name + '" desire="' + (data.desire ? data.desire : '')  + '" gives="' + (data.gives ? data.gives : '')  + '">'
-            + '<a class="' + data.type + '">'
+            return '<td id="' + id + '" class="' + data.type + '" type="' + data.type + '" name="' + data.name + '" desire="' + (data.desire ? data.desire : '')  + '" gives="' + (data.gives ? data.gives : '')  + '">'
                 + '<img src="media/sprites/' + data.type + '/' + data.name + '.png">'
                 + '<label>' + data.name + '</label>'
-                + '</a></td>';
+                + '</td>';
         }
     }
 
@@ -46,7 +45,7 @@ class Puzzle {
         for (var i = 0; i < this.map.length; i++) {
             mapHTML += '<tr>';
             for (var j = 0; j < this.map[i].length; j++) {
-                mapHTML += this.generateCellHTML(this.map[i][j]);
+                mapHTML += this.generateCellHTML('map-' + i + '-' + j, this.map[i][j]);
             }
             mapHTML += '</tr>';
         }
@@ -57,7 +56,6 @@ class Puzzle {
 
         var tableCells = document.querySelectorAll("#map td");
         for (var i = 0; i < tableCells.length; i++) {
-            tableCells[i].id = "table-cell-" + i;
             this.tapOrHoldHandler.add(
                 tableCells[i],
                 node => this.focusOrCombine(node),
@@ -101,6 +99,8 @@ class Puzzle {
 
         this.focusDisplay.innerHTML = '<img src="media/sprites/item/' + name + '.png">'
             + '<label>' + name + '</label>';
+
+        this.checkWin();
     }
 
     combine(node) {
@@ -116,16 +116,16 @@ class Puzzle {
 
         var puzzle = this;
 
+        /* TODO fix that this only works dragging td to td */
         if (desire == focusName) {
             console.debug("Combine " + name + " with " + focusName + ". Dropping " + gives + ".");
             node.style.opacity = 0;
+            var id = node.id;
             setTimeout(() => {
-                puzzle.focusTarget.innerHTML = this.generateCellHTML({ "empty": true });
+                puzzle.focusTarget.innerHTML = this.generateCellHTML(puzzle.focusTarget.id, {});
+                node.parentElement.innerHTML = this.generateCellHTML(node.id, { "type": "item", "name": gives });
                 puzzle.focusTarget = null;
-                node.parentElement.innerHTML = this.generateCellHTML({ "empty": true });
-                this.focusDisplay.innerHTML = '<img src="media/sprites/item/' + gives + '.png">'
-            + '<label>' + gives + '</label>';
-                puzzle.checkWin();
+                puzzle.focus(document.getElementById(id));
             }, 100);
         }
     }

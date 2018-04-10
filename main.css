@@ -19,6 +19,9 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    min-width: fit-content;
+    min-width: -moz-fit-content;
 }
 
 body.busy {
@@ -49,11 +52,15 @@ body > menu {
     flex-direction: column;
     text-align: center;
     justify-content: space-between;
+
+    min-width: fit-content;
+    min-width: -moz-fit-content;
 }
 
 body > menu > h1 {
     margin: 0;
     font-size: 6vh;
+    white-space: nowrap;
 }
 
 #level-list {
@@ -113,12 +120,15 @@ body > game {
 }
 
 body > game > aside {
+    min-width: fit-content;
+    min-width: -moz-fit-content;
     width: 20vw;
     max-width: 30vh;
     display: flex;
     flex-direction: column;
     padding-right: 1%;
     padding-left: 1vh;
+    flex-shrink: 0;
 }
 
 body > game > aside h2,
@@ -168,9 +178,12 @@ body > game > main {
 }
 
 #map  {
+    min-width: fit-content;
+    min-width: -moz-fit-content;
     width: 100%;
     height: 100vh;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 #map td.item,
@@ -201,9 +214,20 @@ body > game > main {
 #map td.npc.asking *,
 dialog::backdrop,
 dialog,
-dialog *
+dialog :not(button)
 {
     cursor: crosshair;
+}
+
+dialog button {
+    cursor: pointer;
+}
+
+#win-menu {
+    float: left;
+}
+#win-next {
+    float: right;
 }
 
 #level-list, #map, #goal, #focus {
@@ -215,14 +239,8 @@ dialog *
 
 #map td {
     position: relative;
-}
-
-#map td > a {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    display: block;
+    text-align: center;
+    vertical-align: middle;
 }
 
 dialog::backdrop { /* native */

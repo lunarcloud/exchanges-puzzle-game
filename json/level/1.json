@@ -3,29 +3,27 @@
     "goal": "letter",
     "map": [
         [
-            {"empty": true},
+            {},
             {
-                "empty": false,
                 "type": "item",
                 "name": "money"
             },
-            {"empty": true}
+            {}
         ],
         [
-            {"empty": true},
-            {"empty": true},
-            {"empty": true}
+            {},
+            {},
+            {}
         ],
         [
             {
-                "empty": false,
                 "type": "npc",
                 "name": "spy",
                 "desire": "money",
                 "gives": "letter"
             },
-            {"empty": true},
-            {"empty": true}
+            {},
+            {}
         ]
     ]
 }
