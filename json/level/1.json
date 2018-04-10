@@ -22,7 +22,7 @@
                 "type": "npc",
                 "name": "spy",
                 "desire": "money",
-                "gives": "info"
+                "gives": "letter"
             },
             {"empty": true},
             {"empty": true}

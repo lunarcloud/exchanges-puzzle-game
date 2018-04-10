@@ -1,6 +1,9 @@
 
 class Menu {
     constructor() {
+
+        var menu = this;
+
         this.menuPane = document.querySelector("body > menu");
         this.levelListElement = document.getElementById("level-list");
         this.gamePane = document.querySelector("body > game");
@@ -8,17 +11,25 @@ class Menu {
         this.fullscreenButton2 = document.getElementById("fullscreen-button2");
         this.backToMenuButton = document.getElementById("back-to-menu-button");
 
-        this.puzzle = new Puzzle();
-        this.currentLevel = null;
+        this.dialog = document.querySelector('dialog');
+        dialogPolyfill.registerDialog(this.dialog);
 
-        this.backToMenuButton.addEventListener("click", e => {
-            this.currentLevel = null;
-            this.show();
-        });
+        this.backToMenuButton.addEventListener("click", e => this.show());
         this.fullscreenButton.addEventListener("click", e => Utils.fullscreenToggle());
         this.fullscreenButton2.addEventListener("click", e => Utils.fullscreenToggle());
 
-        var menu = this;
+        this.puzzle = new Puzzle(
+            menu.dialog,
+            /*winHandler*/ index => {
+                menu.progression.unlocked = index+1;
+                localStorage.setObject('progression', menu.progression);
+                menu.levelListElement.children[index].removeAttribute("disabled");
+
+            },
+            /*returnHandler*/ () => menu.show(),
+            /*nextHandler*/ index => menu.loadLevel(index+1)
+        );
+
         this.loadLevels().then(() => {
             console.log("Found " + menu.levels.length + " levels.");
 
@@ -72,12 +83,13 @@ class Menu {
         var item = document.createElement('li');
         //item.id = "level-" + index;
         item.textContent = name != '' ? name : "Level " + index;
-        if (enabled) item.addEventListener('click', e => menu.loadLevel(index));
-        else item.setAttribute("disabled", true);
+        if (!enabled) item.setAttribute("disabled", true);
+        item.addEventListener('click', e => { if (!e.target.hasAttribute("disabled")) menu.loadLevel(index); });
         this.levelListElement.appendChild(item);
     }
 
     hide() {
+        this.dialog.close();
         this.menuPane.style.opacity = 0;
         this.menuPane.style.zIndex = 0;
         this.gamePane.style.opacity = 1;
@@ -85,6 +97,7 @@ class Menu {
     }
 
     show() {
+        this.dialog.close();
         this.menuPane.style.opacity = 1;
         this.menuPane.style.zIndex = 1;
         this.gamePane.style.opacity = 0;
@@ -94,7 +107,7 @@ class Menu {
     loadLevel(index) {
         return new Promise((resolve, reject) => {
             try {
-                this.puzzle.load(this.levels[index-1]);
+                this.puzzle.load(index, this.levels[index-1]);
                 this.hide();
                 resolve();
             } catch(error) {
