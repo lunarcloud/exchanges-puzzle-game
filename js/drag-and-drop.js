@@ -1,5 +1,5 @@
 
-class DragAndDropHandler {
+export class DragAndDropHandler {
     constructor() {
         this.clear();
     }

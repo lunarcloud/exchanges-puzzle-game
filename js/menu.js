@@ -1,5 +1,7 @@
+import {Utils} from './utils.js';
+import {Puzzle} from './puzzle.js';
 
-class Menu {
+export class Menu {
     constructor() {
 
         var menu = this;

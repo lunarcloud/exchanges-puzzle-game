@@ -1,5 +1,6 @@
+import {Utils} from './utils.js';
 
-class TapOrHoldHandler {
+export class TapOrHoldHandler {
     constructor (ignoreDialogOut) {
 
         this.clear();

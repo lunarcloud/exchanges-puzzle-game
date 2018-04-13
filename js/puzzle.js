@@ -1,5 +1,7 @@
+import {TapOrHoldHandler} from './tap-or-press.js';
+import {DragAndDropHandler} from './drag-and-drop.js';
 
-class Puzzle {
+export class Puzzle {
     constructor(dialog, winHandler, returnHandler, nextHandler) {
         this.winHandler = winHandler;
         this.returnHandler = returnHandler;
