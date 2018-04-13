@@ -91,7 +91,9 @@ export class Menu {
     }
 
     hide() {
-        this.dialog.close();
+        try {
+            this.dialog.close();
+        } catch (error) { /* ignore */ }
         this.menuPane.style.opacity = 0;
         this.menuPane.style.zIndex = 0;
         this.gamePane.style.opacity = 1;
@@ -99,7 +101,9 @@ export class Menu {
     }
 
     show() {
-        this.dialog.close();
+        try {
+            this.dialog.close();
+        } catch (error) { /* ignore */ }
         this.menuPane.style.opacity = 1;
         this.menuPane.style.zIndex = 1;
         this.gamePane.style.opacity = 0;
