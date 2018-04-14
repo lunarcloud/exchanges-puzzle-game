@@ -1,5 +1,5 @@
 {
-    "title": "Simple Exchange",
+    "title": "Wetwork",
     "goal": "letter",
     "map": [
         [
@@ -9,7 +9,7 @@
                 "gives": {
                     "type": "npc",
                     "name": "spy",
-                    "desire": "money",
+                    "desire": "loadedgun",
                     "gives": "letter"
                 }
             },
@@ -19,23 +19,38 @@
             },
             {
                 "type": "item",
-                "name": "TODO"
-            },
+                "name": "gun"
+            }
         ],
         [
             {},
-            {},
-            {}
+            {
+                "type": "none",
+                "name": "wall1",
+                "icon": "h-wall"
+            },
+            {
+                "type": "none",
+                "name": "wall2",
+                "icon": "h-wall"
+
+            }
         ],
         [
             {
                 "type": "npc",
                 "name": "spy",
                 "desire": "letter",
-                "disappearsWith": "spydestination"
+                "disappearsWith": "spydestination",
+                "holdup": "loadedgun"
             },
             {},
-            {}
+            {
+                "type": "item",
+                "name": "bullet",
+                "desire": "gun",
+                "gives": "loadedgun"
+            }
         ]
     ]
 }

@@ -8,12 +8,16 @@
                 "type": "item",
                 "name": "money"
             },
-            {}
+            {
+                "type": "item",
+                "name": "key"
+            }
         ],
         [
             {
-                "type": "item",
-                "name": "wall1"
+                "type": "none",
+                "name": "wall1",
+                "icon": "h-wall"
                 
             },
             {
@@ -26,8 +30,9 @@
                 ]
             },
             {
-                "type": "item",
-                "name": "wall2"                
+                "type": "none",
+                "name": "wall2",
+                "icon": "h-wall"
             }
         ],
         [
