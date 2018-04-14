@@ -15,15 +15,37 @@ export class Puzzle {
         console.debug("Created Puzzle Controller");
     }
 
-    generateCellHTML(id, data) {
-        if (typeof(data.type) !== "string") {
-            return '<td id="' + id + '"></td>';
+    generateCell(id, data) {
+        var clone = document.importNode(
+                document.getElementById("item-cell").content.querySelector("td"),
+                true);
+        clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.png"';
+        clone.id = id;
+
+        if (typeof(data.type) === "string") {
+            clone.classList.add(data.type);
+            for (var i in data) {
+                clone.setAttribute(i, data[i]);
+            }
+            clone.querySelector("img").src = 'media/sprites/'
+                + data.type + '/'
+                + (typeof(data.icon) === "string" ? data.icon : data.name)
+                + '.png';
+            clone.querySelector("label").textContent = data.name;
         } else {
-            return '<td id="' + id + '" class="' + data.type + '" type="' + data.type + '" name="' + data.name + '" desire="' + (data.desire ? data.desire : '')  + '" gives="' + (data.gives ? data.gives : '')  + '">'
-                + '<img src="media/sprites/' + data.type + '/' + data.name + '.png">'
-                + '<label>' + data.name + '</label>'
-                + '</td>';
+            clone.innerHTML = ''; // empty cell
         }
+        return clone;
+    }
+
+    replaceFocusOrGoal(element, img, label) {
+        var clone = document.importNode(
+                document.getElementById("focus-or-goal-content").content,
+                true);
+        clone.querySelector("img").src = img;
+        clone.querySelector("label").textContent = label;
+        element.innerHTML = '';
+        element.appendChild(clone);
     }
 
     load(index, levelDefinition) {
@@ -38,20 +60,18 @@ export class Puzzle {
         this.goal = levelDefinition.goal;
         this.map = levelDefinition.map;
 
-        this.goalElement.innerHTML = '<img src="media/sprites/item/' + this.goal + '.png">'
-        + '<label>' + this.goal + '</label>';
+        this.replaceFocusOrGoal(this.goalElement, "media/sprites/item/" + this.goal + ".png", this.goal);
         this.focusDisplay.innerHTML = ''; // clear
         this.mapElement.innerHTML = ''; // clear
 
-        var mapHTML = '';
         for (var i = 0; i < this.map.length; i++) {
-            mapHTML += '<tr>';
+            let row = document.createElement("tr");
             for (var j = 0; j < this.map[i].length; j++) {
-                mapHTML += this.generateCellHTML('map-' + i + '-' + j, this.map[i][j]);
+                let cell = this.generateCell('map-' + i + '-' + j, this.map[i][j]);
+                row.appendChild(cell);
             }
-            mapHTML += '</tr>';
+            this.mapElement.appendChild(row);
         }
-        this.mapElement.innerHTML = mapHTML;
 
         this.tapOrHoldHandler = new TapOrHoldHandler(true);
         this.dragAndDropHandler = new DragAndDropHandler();
@@ -99,8 +119,7 @@ export class Puzzle {
         node.classList.add("focusing");
         setTimeout(() => requestAnimationFrame(() => node.classList.remove("focusing")), 300);
 
-        this.focusDisplay.innerHTML = '<img src="media/sprites/item/' + name + '.png">'
-            + '<label>' + name + '</label>';
+        this.replaceFocusOrGoal(this.focusDisplay, "media/sprites/item/" + name + ".png", name);
 
         this.checkWin();
     }
@@ -124,8 +143,13 @@ export class Puzzle {
             node.style.opacity = 0;
             var id = node.id;
             setTimeout(() => {
-                puzzle.focusTarget.innerHTML = this.generateCellHTML(puzzle.focusTarget.id, {});
-                node.parentElement.innerHTML = this.generateCellHTML(node.id, { "type": "item", "name": gives });
+                puzzle.focusTarget.parentElement.replaceChild(
+                    puzzle.generateCell(puzzle.focusTarget.id, {}),
+                    puzzle.focusTarget);
+                node.parentElement.parentElement.replaceChild(
+                    puzzle.generateCell(node.id, { "type": "item", "name": gives }),
+                    node.parentElement);
+
                 puzzle.focusTarget = null;
                 puzzle.focus(document.getElementById(id));
             }, 100);
@@ -138,9 +162,14 @@ export class Puzzle {
         let desire = node.getAttribute("desire");
         if (type !== "npc") return;
 
-        this.dialog.innerHTML = '<h2>Wants</h2>'
-            + '<img src="media/sprites/item/' + desire + '.png">'
-            + '<label>' + desire + '</label>';
+        var clone = document.importNode(
+                document.getElementById("dialog-ask").content,
+                true);
+        clone.querySelector("img").src = 'media/sprites/item/' + desire + '.png';
+        clone.querySelector("label").textContent = desire;
+
+        this.dialog.innerHTML = "";
+        this.dialog.appendChild(clone);
 
         try{
             this.dialog.showModal();
@@ -165,12 +194,13 @@ export class Puzzle {
 
             this.winHandler(this.index);
 
-            this.dialog.innerHTML = '<h2>You Won!</h2>'
-            + '<img src="media/sprites/item/' + this.goal + '.png">'
-            /*+ '<label>' + this.goal + '</label>'*/
-            + '<br>'
-            + '<button id="win-menu" class="big-button">↶</button>'
-            + '<button id="win-next" class="big-button">⏭</button>';
+            var clone = document.importNode(
+                document.getElementById("dialog-win").content,
+                true);
+            clone.querySelector("img").src = 'media/sprites/item/' + this.goal + '.png';
+
+            this.dialog.innerHTML = "";
+            this.dialog.appendChild(clone);
 
             document.getElementById("win-menu").addEventListener("click", e => this.returnHandler());
             document.getElementById("win-next").addEventListener("click", e => this.nextHandler(this.index));

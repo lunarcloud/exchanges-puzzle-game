@@ -79,8 +79,33 @@
         <main>
             <table id="map"></table>
         </main>
-        <dialog></dialog>
     </game>
+    <dialog></dialog>
+    <templates>
+        <template id="dialog-ask">
+            <h2>Wants</h2>
+            <img src="">
+            <label></label>
+        </template>
+        <template id="dialog-win">
+            <h2>You Won!</h2>
+            <img src="">
+            <!--label></label-->
+            <br>
+            <button id="win-menu" class="big-button">↶</button>
+            <button id="win-next" class="big-button">⏭</button>
+        </template>
+        <template id="item-cell">
+            <td id="">
+                <img src="">
+                <label></label>
+            </td>
+        </template>
+        <template id="focus-or-goal-content">
+            <img src="">
+            <label></label>
+        </template>
+    </templates>
   </body>
   <script src="third-party/screenfull.min.js"></script>
   <script src="third-party/dialog-polyfill.js"></script>

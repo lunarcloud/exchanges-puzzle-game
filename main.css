@@ -3,6 +3,11 @@
     --system-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Noto Sans UI", "Roboto", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
+templates {
+    display: none;
+}
+
+
 body {
     font-family: var(--system-font);
     margin: 0;
@@ -31,7 +36,8 @@ body.no-cursor {
     cursor: none !important;
 }
 
-body > :not(script) {
+body > menu,
+body > game {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -41,6 +47,11 @@ body > :not(script) {
     height: 100vh;
     margin: 0;
     padding: 0;
+}
+
+dialog {
+    z-index: 90;
+    min-width: 40vw;
 }
 
 body > menu {
