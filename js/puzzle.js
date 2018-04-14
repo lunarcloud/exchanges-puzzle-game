@@ -22,7 +22,9 @@ export class Puzzle {
         clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.png"';
         clone.id = id;
 
-        if (typeof(data.type) === "string") {
+        if (typeof(data) !== "object" || typeof(data.type) !== "string" || typeof(data.name) !== "string") {
+            clone.innerHTML = ''; // empty cell
+        } else {
             clone.classList.add(data.type);
             for (var i in data) {
                 clone.setAttribute(i, data[i]);
@@ -32,8 +34,6 @@ export class Puzzle {
                 + (typeof(data.icon) === "string" ? data.icon : data.name)
                 + '.png';
             clone.querySelector("label").textContent = data.name;
-        } else {
-            clone.innerHTML = ''; // empty cell
         }
         return clone;
     }
@@ -126,7 +126,6 @@ export class Puzzle {
 
     combine(node) {
         if (this.focusTarget === null || node == this.focusTarget) return;
-        // TODO Combination logic
 
         let focusName = this.focusTarget.getAttribute("name");
 
@@ -134,25 +133,34 @@ export class Puzzle {
         let type = node.getAttribute("type");
         let desire = node.getAttribute("desire");
         let gives = node.getAttribute("gives");
+        let holdUp = node.getAttribute("holdup");
 
         var puzzle = this;
 
         /* TODO fix that this only works dragging td to td */
-        if (desire == focusName) {
-            console.debug("Combine " + name + " with " + focusName + ". Dropping " + gives + ".");
-            node.style.opacity = 0;
-            var id = node.id;
-            setTimeout(() => {
-                puzzle.focusTarget.parentElement.replaceChild(
-                    puzzle.generateCell(puzzle.focusTarget.id, {}),
-                    puzzle.focusTarget);
-                node.parentElement.parentElement.replaceChild(
-                    puzzle.generateCell(node.id, { "type": "item", "name": gives }),
-                    node.parentElement);
 
+        if (desire == focusName) {
+            let holdUpElement = document.querySelector("#map td[name=" + holdUp + "]");
+            if (holdUpElement !== null) {
+                this.focusDisplay.innerHTML = '';
                 puzzle.focusTarget = null;
-                puzzle.focus(document.getElementById(id));
-            }, 100);
+                this.holdUpDialog(holdUp, holdUpElement.getAttribute("icon"));
+            } else {
+                console.debug("Combine " + name + " with " + focusName + ". Dropping " + gives + ".");
+                node.style.opacity = 0;
+                var id = node.id;
+                setTimeout(() => {
+                    puzzle.focusTarget.parentElement.replaceChild(
+                        puzzle.generateCell(puzzle.focusTarget.id, {}),
+                        puzzle.focusTarget);
+                    node.parentElement.parentElement.replaceChild(
+                        puzzle.generateCell(node.id, { "type": "item", "name": gives }),
+                        node.parentElement);
+
+                    puzzle.focusTarget = null;
+                    puzzle.focus(document.getElementById(id));
+                }, 100);
+            }
         }
     }
 
@@ -167,6 +175,24 @@ export class Puzzle {
                 true);
         clone.querySelector("img").src = 'media/sprites/item/' + desire + '.png';
         clone.querySelector("label").textContent = desire;
+
+        this.dialog.innerHTML = "";
+        this.dialog.appendChild(clone);
+
+        try{
+            this.dialog.showModal();
+            requestAnimationFrame(() => node.classList.add("asking"));
+        } catch(error) {
+            // not important
+        }
+    }
+
+    holdUpDialog(name, icon) {
+        var clone = document.importNode(
+                document.getElementById("dialog-hold-up").content,
+                true);
+        clone.querySelector("img").src = 'media/sprites/item/' + icon + '.png';
+        clone.querySelector("label").textContent = name;
 
         this.dialog.innerHTML = "";
         this.dialog.appendChild(clone);
