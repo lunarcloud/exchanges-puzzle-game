@@ -1,21 +1,37 @@
 {
-	"title": "",
-	"goal": "",
-	"map": [
-		[
-			{"empty": true},
-			{"empty": true},
-			{"empty": true}
-		],
-		[
-			{"empty": true},
-			{"empty": true},
-			{"empty": true}
-		],
-		[
-			{"empty": true},
-			{"empty": true},
-			{"empty": true}
-		]
-	]
+    "title": "Not While They Watch",
+    "goal": "letter",
+    "map": [
+        [
+            {},
+            {
+                "type": "item",
+                "name": "money"
+            },
+            {}
+        ],
+        [
+            {},
+            {},
+            {
+                "type": "npc",
+                "name": "spy",
+                "desire": "money",
+                "gives": "letter",
+                "holdup": "dude"
+            }
+        ],
+        [
+            {
+                "type": "npc",
+                "name": "dude",
+                "desire": "icecream"
+            },
+            {},
+            {
+                "type": "item",
+                "name": "icecream"
+            }
+        ]
+    ]
 }

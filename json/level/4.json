@@ -1,0 +1,45 @@
+{
+    "title": "Resident Info",
+    "goal": "letter",
+    "map": [
+        [
+            {},
+            {
+                "type": "item",
+                "name": "money"
+            },
+            {}
+        ],
+        [
+            {
+                "type": "item",
+                "name": "wall1"
+                
+            },
+            {
+                "type": "item",
+                "name": "gate",
+                "desire": "key",
+                "disappearsWith": [
+                    "wall1",
+                    "wall2"
+                ]
+            },
+            {
+                "type": "item",
+                "name": "wall2"                
+            }
+        ],
+        [
+            {},
+            {
+                "type": "npc",
+                "name": "spy",
+                "desire": "money",
+                "gives": "letter",
+                "holdup": "gate"
+            },
+            {}
+        ]
+    ]
+}

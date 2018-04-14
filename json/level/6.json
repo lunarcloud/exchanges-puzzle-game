@@ -1,0 +1,41 @@
+{
+    "title": "Simple Exchange",
+    "goal": "letter",
+    "map": [
+        [
+            {
+                "type": "none",
+                "name": "spydestination",
+                "gives": {
+                    "type": "npc",
+                    "name": "spy",
+                    "desire": "money",
+                    "gives": "letter"
+                }
+            },
+            {
+                "type": "item",
+                "name": "letter"
+            },
+            {
+                "type": "item",
+                "name": "TODO"
+            },
+        ],
+        [
+            {},
+            {},
+            {}
+        ],
+        [
+            {
+                "type": "npc",
+                "name": "spy",
+                "desire": "letter",
+                "disappearsWith": "spydestination"
+            },
+            {},
+            {}
+        ]
+    ]
+}

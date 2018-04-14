@@ -1,0 +1,44 @@
+{
+    "title": "Mechanic's Helper",
+    "goal": "robot",
+    "map": [
+        [
+            {},
+            {},
+            {
+                "type": "npc",
+                "name": "mechanic",
+                "desire": "fulltoolbox",
+                "gives": "robot"
+            }
+        ],
+        [
+            {},
+            {
+                "type": "item",
+                "name": "emptytoolbox",
+                "desire": [
+                    "tool1",
+                    "tool2",
+                    "tool3"
+                ],
+                "gives": "fulltoolbox"
+            },
+            {
+                "type": "item",
+                "name": "tool2"
+            }
+        ],
+        [
+            {
+                "type": "item",
+                "name": "tool1"
+            },
+            {},
+            {
+                "type": "item",
+                "name": "tool3"
+            }
+        ]
+    ]
+}

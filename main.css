@@ -69,6 +69,8 @@ body > menu > h1 {
     height: 100%;
     list-style-position: inside;
     font-size: 4vh;
+    font-size: calc(3vh + 3vw);
+    text-align: left;
 }
 
 #level-list li:not([disabled]) {
