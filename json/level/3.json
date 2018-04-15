@@ -8,7 +8,7 @@
             {
                 "type": "npc",
                 "name": "mechanic",
-                "desire": ["fulltoolbox"],
+                "desire": ["full-toolbox"],
                 "gives": "robot"
             }
         ],

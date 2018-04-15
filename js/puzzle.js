@@ -27,7 +27,11 @@ export class Puzzle {
         } else {
             clone.classList.add(data.type);
             for (var i in data) {
-                clone.setAttribute(i, data[i]);
+                if (i == 'gives' && typeof(data[i]) === "object") {
+                    clone.setAttribute(i, JSON.stringify(data[i]));
+                } else {
+                    clone.setAttribute(i, data[i]);
+                }
             }
             clone.querySelector("img").src = 'media/sprites/'
                 + data.type + '/'
@@ -54,6 +58,17 @@ export class Puzzle {
     getArrayFromAttr(node, name) {
         var text = node.getAttribute(name);
         return typeof(text) === "string" ? text.split(',') : [];
+    }
+
+    getGivesFromNode(node) {
+        let text = node.getAttribute("gives");
+        if (typeof(text) !== "string") {
+            return {};
+        } else if (text.startsWith("{") && text.endsWith("}")) {
+            return JSON.parse(text);
+        } else {
+            return { type: "item", name: text };
+        }
     }
 
     load(index, levelDefinition) {
@@ -140,7 +155,7 @@ export class Puzzle {
         let name = node.getAttribute("name");
         let type = node.getAttribute("type");
         let desire = this.getArrayFromAttr(node, "desire");
-        let gives = node.getAttribute("gives");
+        let gives = this.getGivesFromNode(node, "gives");
         let holdUp = this.getArrayFromAttr(node, "holdup");
 
         var puzzle = this;
@@ -148,15 +163,12 @@ export class Puzzle {
         /* TODO fix that this only works dragging td to td */
         if (desire.includes(focusName)) {
 
-            let holdUpElement;
+            let holdUpCount = 0;
             for (var i = 0; i < holdUp.length; i++) {
                 let elem = document.querySelector("#map td[name=" + holdUp[i] + "]");
-                if (typeof(elem) !== "undefined" && elem !== null) {
-                    holdUpElement = elem;
-                    break;
-                }
+                if (typeof(elem) !== "undefined" && elem !== null) holdUpCount++;
             }
-            if (typeof(holdUpElement) !== "undefined" && holdUpElement !== null ) {
+            if (holdUpCount > 0) {
 
                 this.focusDisplay.innerHTML = '';
                 puzzle.focusTarget = null;
@@ -166,18 +178,24 @@ export class Puzzle {
                 console.debug("Combine " + name + " with " + focusName + ".");
                 let id = node.id;
                 let progressbar = node.querySelector("progress");
+                puzzle.focusTarget.innerHTML = '';
+                while(puzzle.focusTarget.attributes.length > 0) puzzle.focusTarget.removeAttribute(puzzle.focusTarget.attributes[0].name);
+                puzzle.focusTarget = null;
+                puzzle.focusDisplay.innerHTML = '';
 
                 setTimeout(() => {
-                    progressbar.value++;
-                    puzzle.focusTarget.innerHTML = '';
-                    puzzle.focusTarget = null;
-                    puzzle.focusDisplay.innerHTML = '';
+                    let desireCount = progressbar.max;
+                    for (var i = 0; i < desire.length; i++) {
+                        let elem = document.querySelector("#map td[name=" + desire[i] + "]");
+                        if (typeof(elem) !== "undefined" && elem !== null) desireCount--;
+                    }
+                    progressbar.value = desireCount;
 
                     if (progressbar.value >= progressbar.max) {
                         console.debug("Dropping " + gives + ".");
-                        node.parentElement.parentElement.replaceChild(
-                            puzzle.generateCell(node.id, { "type": "item", "name": gives }),
-                            node.parentElement);
+                        node.parentElement.replaceChild(
+                            puzzle.generateCell(node.id, gives),
+                            node);
                         puzzle.focus(document.getElementById(id));
                     }
                 }, 100);
@@ -189,7 +207,7 @@ export class Puzzle {
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
         let desire = this.getArrayFromAttr(node, "desire");
-        if (desire.length < 0) return;
+        if (desire.length < 1) return;
         let holdup = this.getArrayFromAttr(node, "holdup");
 
         let askElem = document.importNode(document.getElementById("dialog-ask").content, true);
