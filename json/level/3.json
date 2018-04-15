@@ -16,13 +16,13 @@
             {},
             {
                 "type": "item",
-                "name": "emptytoolbox",
+                "name": "toolbox",
                 "desire": [
                     "tool1",
                     "tool2",
                     "tool3"
                 ],
-                "gives": "fulltoolbox"
+                "gives": "full-toolbox"
             },
             {
                 "type": "item",
