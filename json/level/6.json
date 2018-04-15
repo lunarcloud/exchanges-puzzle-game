@@ -9,7 +9,7 @@
                 "gives": {
                     "type": "npc",
                     "name": "spy",
-                    "desire": "loadedgun",
+                    "desire": ["loadedgun"],
                     "gives": "letter"
                 }
             },
@@ -40,15 +40,15 @@
             {
                 "type": "npc",
                 "name": "spy",
-                "desire": "letter",
-                "disappearsWith": "spydestination",
-                "holdup": "loadedgun"
+                "desire": ["letter"],
+                "disappearsWith": ["spydestination"],
+                "holdup": ["loadedgun"]
             },
             {},
             {
                 "type": "item",
                 "name": "bullet",
-                "desire": "gun",
+                "desire": ["gun"],
                 "gives": "loadedgun"
             }
         ]

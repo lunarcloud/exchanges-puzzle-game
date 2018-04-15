@@ -34,6 +34,9 @@ export class Puzzle {
                 + (typeof(data.icon) === "string" ? data.icon : data.name)
                 + '.png';
             clone.querySelector("label").textContent = data.name;
+            if (typeof(data.desire) === typeof([]) && data.desire.length > 1) {
+                clone.querySelector("progress").setAttribute("max", data.desire.length);
+            }
         }
         return clone;
     }
@@ -46,6 +49,11 @@ export class Puzzle {
         clone.querySelector("label").textContent = label;
         element.innerHTML = '';
         element.appendChild(clone);
+    }
+
+    getArrayFromAttr(node, name) {
+        var text = node.getAttribute(name);
+        return typeof(text) === "string" ? text.split(',') : [];
     }
 
     load(index, levelDefinition) {
@@ -131,34 +139,47 @@ export class Puzzle {
 
         let name = node.getAttribute("name");
         let type = node.getAttribute("type");
-        let desire = node.getAttribute("desire");
+        let desire = this.getArrayFromAttr(node, "desire");
         let gives = node.getAttribute("gives");
-        let holdUp = node.getAttribute("holdup");
+        let holdUp = this.getArrayFromAttr(node, "holdup");
 
         var puzzle = this;
 
         /* TODO fix that this only works dragging td to td */
+        if (desire.includes(focusName)) {
 
-        if (desire == focusName) {
-            let holdUpElement = document.querySelector("#map td[name=" + holdUp + "]");
-            if (holdUpElement !== null) {
+            let holdUpElement;
+            for (var i = 0; i < holdUp.length; i++) {
+                let elem = document.querySelector("#map td[name=" + holdUp + "]");
+                if (typeof(elem) === "undefined") {
+                    holdUpElement = elem;
+                    break;
+                }
+            }
+            if (typeof(holdUpElement) !== "undefined") {
+
                 this.focusDisplay.innerHTML = '';
                 puzzle.focusTarget = null;
                 this.holdUpDialog(holdUp, holdUpElement.getAttribute("icon"));
             } else {
-                console.debug("Combine " + name + " with " + focusName + ". Dropping " + gives + ".");
-                node.style.opacity = 0;
-                var id = node.id;
-                setTimeout(() => {
-                    puzzle.focusTarget.parentElement.replaceChild(
-                        puzzle.generateCell(puzzle.focusTarget.id, {}),
-                        puzzle.focusTarget);
-                    node.parentElement.parentElement.replaceChild(
-                        puzzle.generateCell(node.id, { "type": "item", "name": gives }),
-                        node.parentElement);
 
+                console.debug("Combine " + name + " with " + focusName + ".");
+                let id = node.id;
+                let progressbar = node.querySelector("progress");
+
+                setTimeout(() => {
+                    progressbar.value++;
+                    puzzle.focusTarget.innerHTML = '';
                     puzzle.focusTarget = null;
-                    puzzle.focus(document.getElementById(id));
+                    puzzle.focusDisplay.innerHTML = '';
+
+                    if (progressbar.value >= progressbar.max) {
+                        console.debug("Dropping " + gives + ".");
+                        node.parentElement.parentElement.replaceChild(
+                            puzzle.generateCell(node.id, { "type": "item", "name": gives }),
+                            node.parentElement);
+                        puzzle.focus(document.getElementById(id));
+                    }
                 }, 100);
             }
         }
@@ -167,8 +188,8 @@ export class Puzzle {
     ask(node) {
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
-        let desire = node.getAttribute("desire");
-        if (type !== "npc") return;
+        let desire = this.getArrayFromAttr(node, "desire");
+        if (desire.length < 0) return;
 
         var clone = document.importNode(
                 document.getElementById("dialog-ask").content,

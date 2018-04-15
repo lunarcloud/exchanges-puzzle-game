@@ -267,3 +267,9 @@ dialog {
   top: 50%;
   transform: translate(0, -50%);
 }
+
+#map progress[max=''],
+#map progress[max='0'],
+#map progress[max='1'] {
+    display: none;
+}

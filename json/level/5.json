@@ -6,11 +6,11 @@
             {
                 "type": "npc",
                 "name": "mailbox",
-                "desire": "blueprint",
+                "desire": ["blueprint"],
                 "gives": {
                     "type": "npc",
                     "name": "mailbox",
-                    "desire": "blueprint",
+                    "desire": ["blueprint"],
                     "gives": "fullmailbox"
                 }
             },
@@ -43,18 +43,18 @@
                 "type": "npc",
                 "name": "spy1",
                 "icon": "spy",
-                "desire": "notepad",
+                "desire": ["notepad"],
                 "gives": "blueprint",
-                "holdup": "blueprint"
+                "holdup": ["blueprint"]
             },
             {},
             {
                 "type": "npc",
                 "name": "spy2",
                 "icon": "spy",
-                "desire": "notepad",
+                "desire": ["notepad"],
                 "gives": "blueprint",
-                "holdup": "blueprint"
+                "holdup": ["blueprint"]
             }
         ]
     ]

@@ -82,15 +82,17 @@
     </game>
     <dialog></dialog>
     <templates>
-        <template id="dialog-ask">
-            <h2>Wants</h2>
+        <template id="item">
             <img src="">
             <label></label>
         </template>
+        <template id="dialog-ask">
+            <h2>Wants</h2>
+            <items></items>
+        </template>
         <template id="dialog-hold-up">
             <h2>Held Up By</h2>
-            <img src="">
-            <label></label>
+            <items></items>
             <button class="big-button" onclick="this.parentElement.close();">&times;</button>
         </template>
         <template id="dialog-win">
@@ -105,6 +107,7 @@
             <td id="">
                 <img src="">
                 <label></label>
+                <progress value="0" max="1"></progress>
             </td>
         </template>
         <template id="focus-or-goal-content">
