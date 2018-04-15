@@ -20,7 +20,9 @@
             },
             {
                 "type": "item",
-                "name": "gun"
+                "name": "bullet",
+                "desire": ["gun"],
+                "gives": "loadedgun"
             }
         ],
         [
@@ -48,8 +50,8 @@
             {},
             {
                 "type": "item",
-                "name": "bullet",
-                "desire": ["gun"],
+                "name": "gun",
+                "desire": ["bullet"],
                 "gives": "loadedgun"
             }
         ]
