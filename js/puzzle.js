@@ -131,7 +131,11 @@ export class Puzzle {
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
 
-        if (type != "item") return;
+        if (type != "item") {
+            this.focusDisplay.innerHTML = '';
+            puzzle.focusTarget = null;
+            return;
+        }
 
         if (node == this.focusTarget) return;
         console.debug("Focus: " + type + " | " + name);
@@ -184,7 +188,8 @@ export class Puzzle {
                     let elem = document.querySelector("#map td[name=" + removes[i] + "]");
                     if (typeof(elem) === "undefined" || elem === null) continue;
 
-                    elem.parentElement.replaceChild(puzzle.generateCell(elem.id, {}), elem);
+                    let removeGives = this.getGivesFromNode(elem, "gives");
+                    elem.parentElement.replaceChild(puzzle.generateCell(elem.id, removeGives), elem);
                 }
 
                 puzzle.focusTarget.parentElement.replaceChild(
@@ -197,7 +202,7 @@ export class Puzzle {
                 setTimeout(() => {
                     progressbar.value++;
                     if (progressbar.value >= progressbar.max) {
-                        console.debug("Dropping " + gives + ".");
+                        console.debug("Dropping " + gives.name + ".");
                         node.parentElement.replaceChild(
                             puzzle.generateCell(node.id, gives),
                             node);
@@ -273,18 +278,17 @@ export class Puzzle {
     checkWin() {
         if (this.focusDisplay.querySelector("label").textContent == this.goalElement.querySelector("label").textContent) {
 
-            this.winHandler(this.index);
+            var moreLevels = this.winHandler(this.index);
 
-            var clone = document.importNode(
-                document.getElementById("dialog-win").content,
-                true);
+            var clone = document.importNode(document.getElementById("dialog-win").content, true);
             clone.querySelector("img").src = 'media/sprites/item/' + this.goal + '.png';
 
-            this.dialog.innerHTML = "";
+            this.dialog.innerHTML = '';
             this.dialog.appendChild(clone);
 
             document.getElementById("win-menu").addEventListener("click", e => this.returnHandler());
-            document.getElementById("win-next").addEventListener("click", e => this.nextHandler(this.index));
+            if (moreLevels) document.getElementById("win-next").addEventListener("click", e => this.nextHandler(this.index));
+            else document.getElementById("win-next").parentElement.removeChild(document.getElementById("win-next"));
 
             try{
                 this.dialog.showModal();

@@ -273,3 +273,7 @@ dialog {
 #map progress[max='1'] {
     display: none;
 }
+
+#map [type='hidden'] * {
+    display: none;
+}

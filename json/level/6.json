@@ -4,7 +4,7 @@
     "map": [
         [
             {
-                "type": "none",
+                "type": "hidden",
                 "name": "spydestination",
                 "gives": {
                     "type": "npc",
@@ -15,7 +15,8 @@
             },
             {
                 "type": "item",
-                "name": "letter"
+                "name": "letter-distraction",
+                "icon": "letter"
             },
             {
                 "type": "item",
@@ -40,7 +41,7 @@
             {
                 "type": "npc",
                 "name": "spy",
-                "desire": ["letter"],
+                "desire": ["letter-distraction"],
                 "removes": ["spydestination"],
                 "holdup": ["loadedgun"]
             },

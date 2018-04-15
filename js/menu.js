@@ -25,8 +25,13 @@ export class Menu {
             /*winHandler*/ index => {
                 menu.progression.unlocked = index+1;
                 localStorage.setObject('progression', menu.progression);
-                menu.levelListElement.children[index].removeAttribute("disabled");
-
+                try {
+                    menu.levelListElement.children[index].removeAttribute("disabled");
+                    return true;
+                } catch (err) {
+                    /* No More levels! */
+                    return false;
+                }
             },
             /*returnHandler*/ () => menu.show(),
             /*nextHandler*/ index => menu.loadLevel(index+1)
