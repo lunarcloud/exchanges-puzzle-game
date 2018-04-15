@@ -41,7 +41,7 @@
                 "type": "npc",
                 "name": "spy",
                 "desire": ["letter"],
-                "disappearsWith": ["spydestination"],
+                "removes": ["spydestination"],
                 "holdup": ["loadedgun"]
             },
             {},

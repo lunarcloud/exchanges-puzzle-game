@@ -24,7 +24,7 @@
                 "type": "item",
                 "name": "gate",
                 "desire": ["key"],
-                "disappearsWith": [
+                "removes": [
                     "wall1",
                     "wall2"
                 ]

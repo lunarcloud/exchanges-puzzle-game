@@ -157,6 +157,7 @@ export class Puzzle {
         let desire = this.getArrayFromAttr(node, "desire");
         let gives = this.getGivesFromNode(node, "gives");
         let holdUp = this.getArrayFromAttr(node, "holdup");
+        let removes = this.getArrayFromAttr(node, "removes");
 
         var puzzle = this;
 
@@ -178,19 +179,23 @@ export class Puzzle {
                 console.debug("Combine " + name + " with " + focusName + ".");
                 let id = node.id;
                 let progressbar = node.querySelector("progress");
-                puzzle.focusTarget.innerHTML = '';
-                while(puzzle.focusTarget.attributes.length > 0) puzzle.focusTarget.removeAttribute(puzzle.focusTarget.attributes[0].name);
+
+                for (var i = 0; i < removes.length; i++) {
+                    let elem = document.querySelector("#map td[name=" + removes[i] + "]");
+                    if (typeof(elem) === "undefined" || elem === null) continue;
+
+                    elem.parentElement.replaceChild(puzzle.generateCell(elem.id, {}), elem);
+                }
+
+                puzzle.focusTarget.parentElement.replaceChild(
+                            puzzle.generateCell(puzzle.focusTarget.id, {}),
+                            puzzle.focusTarget);
+
                 puzzle.focusTarget = null;
                 puzzle.focusDisplay.innerHTML = '';
 
                 setTimeout(() => {
-                    let desireCount = progressbar.max;
-                    for (var i = 0; i < desire.length; i++) {
-                        let elem = document.querySelector("#map td[name=" + desire[i] + "]");
-                        if (typeof(elem) !== "undefined" && elem !== null) desireCount--;
-                    }
-                    progressbar.value = desireCount;
-
+                    progressbar.value++;
                     if (progressbar.value >= progressbar.max) {
                         console.debug("Dropping " + gives + ".");
                         node.parentElement.replaceChild(
