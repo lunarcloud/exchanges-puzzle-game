@@ -66,7 +66,7 @@ export class Menu {
                 });
             })
             .catch(error => {
-                if (error.message == 404 || error.message == "Failed to fetch") {
+                if (error.message == 403 || error.message == 404 || error.message == "Failed to fetch") {
                     listResolve();
                 } else {
                     alert("Couldn't load puzzle " + index + "!");
