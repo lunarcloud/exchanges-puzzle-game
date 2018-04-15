@@ -150,17 +150,17 @@ export class Puzzle {
 
             let holdUpElement;
             for (var i = 0; i < holdUp.length; i++) {
-                let elem = document.querySelector("#map td[name=" + holdUp + "]");
-                if (typeof(elem) === "undefined") {
+                let elem = document.querySelector("#map td[name=" + holdUp[i] + "]");
+                if (typeof(elem) !== "undefined" && elem !== null) {
                     holdUpElement = elem;
                     break;
                 }
             }
-            if (typeof(holdUpElement) !== "undefined") {
+            if (typeof(holdUpElement) !== "undefined" && holdUpElement !== null ) {
 
                 this.focusDisplay.innerHTML = '';
                 puzzle.focusTarget = null;
-                this.holdUpDialog(holdUp, holdUpElement.getAttribute("icon"));
+                this.holdUpDialog(holdUp);
             } else {
 
                 console.debug("Combine " + name + " with " + focusName + ".");
@@ -190,15 +190,18 @@ export class Puzzle {
         let name = node.getAttribute("name");
         let desire = this.getArrayFromAttr(node, "desire");
         if (desire.length < 0) return;
+        let holdup = this.getArrayFromAttr(node, "holdup");
 
-        var clone = document.importNode(
-                document.getElementById("dialog-ask").content,
-                true);
-        clone.querySelector("img").src = 'media/sprites/item/' + desire + '.png';
-        clone.querySelector("label").textContent = desire;
+        let askElem = document.importNode(document.getElementById("dialog-ask").content, true);
+        for (var i = 0; i < desire.length; i++) {
+            let itemElem = document.importNode(document.getElementById("item").content, true);
+            itemElem.querySelector("img").src = 'media/sprites/item/' + desire[i] + '.png';
+            itemElem.querySelector("label").textContent = desire[i];
+            askElem.appendChild(itemElem);
+        }
 
         this.dialog.innerHTML = "";
-        this.dialog.appendChild(clone);
+        this.dialog.appendChild(askElem);
 
         try{
             this.dialog.showModal();
@@ -208,15 +211,23 @@ export class Puzzle {
         }
     }
 
-    holdUpDialog(name, icon) {
+    holdUpDialog(holdUpList) {
         var clone = document.importNode(
                 document.getElementById("dialog-hold-up").content,
                 true);
-        clone.querySelector("img").src = 'media/sprites/item/' + icon + '.png';
-        clone.querySelector("label").textContent = name;
+
+        let holdElem = document.importNode(document.getElementById("dialog-hold-up").content, true);
+
+        for (var i = 0; i < holdUpList.length; i++) {
+            let icon = document.querySelector("#map td[name=" + holdUpList[i] + "]").icon;
+            let itemElem = document.importNode(document.getElementById("item").content, true);
+            itemElem.querySelector("img").src = 'media/sprites/item/' + icon + '.png';
+            itemElem.querySelector("label").textContent = holdUpList[i];
+            holdElem.querySelector("items").appendChild(itemElem);
+        }
 
         this.dialog.innerHTML = "";
-        this.dialog.appendChild(clone);
+        this.dialog.appendChild(holdElem);
 
         try{
             this.dialog.showModal();
