@@ -77,15 +77,14 @@ export class Puzzle {
         if (typeof(levelDefinition) !== "object") throw "level definition missing!";
         this.originalDefinition = levelDefinition;
 
-        this.focusTarget = null;
 
         this.title = levelDefinition.title;
         this.goal = levelDefinition.goal;
         this.map = levelDefinition.map;
 
         this.replaceFocusOrGoal(this.goalElement, "media/sprites/item/" + this.goal + ".png", this.goal);
-        this.focusDisplay.innerHTML = ''; // clear
         this.mapElement.innerHTML = ''; // clear
+        this.unfocus();
 
         for (var i = 0; i < this.map.length; i++) {
             let row = document.createElement("tr");
@@ -132,8 +131,7 @@ export class Puzzle {
         let name = node.getAttribute("name");
 
         if (type != "item") {
-            this.focusDisplay.innerHTML = '';
-            puzzle.focusTarget = null;
+            this.unfocus();
             return;
         }
 
@@ -149,6 +147,11 @@ export class Puzzle {
         this.replaceFocusOrGoal(this.focusDisplay, "media/sprites/item/" + name + ".png", name);
 
         this.checkWin();
+    }
+
+    unfocus() {
+        this.focusDisplay.innerHTML = '';
+        this.focusTarget = null;
     }
 
     combine(node) {
@@ -173,10 +176,10 @@ export class Puzzle {
                 let elem = document.querySelector("#map td[name=" + holdUp[i] + "]");
                 if (typeof(elem) !== "undefined" && elem !== null) holdUpCount++;
             }
+
             if (holdUpCount > 0) {
 
-                this.focusDisplay.innerHTML = '';
-                puzzle.focusTarget = null;
+                this.unfocus();
                 this.holdUpDialog(holdUp);
             } else {
 
@@ -196,8 +199,7 @@ export class Puzzle {
                             puzzle.generateCell(puzzle.focusTarget.id, {}),
                             puzzle.focusTarget);
 
-                puzzle.focusTarget = null;
-                puzzle.focusDisplay.innerHTML = '';
+                puzzle.unfocus();
 
                 setTimeout(() => {
                     progressbar.value++;
@@ -210,6 +212,8 @@ export class Puzzle {
                     }
                 }, 100);
             }
+        } else {
+            this.unfocus();
         }
     }
 
