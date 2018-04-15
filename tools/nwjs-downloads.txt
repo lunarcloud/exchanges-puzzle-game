@@ -1,5 +1,1 @@
-http://dl.nwjs.io/v0.29.3/nwjs-v0.29.3-win-x64.zip
-http://dl.nwjs.io/v0.29.3/nwjs-v0.29.3-win-ia32.zip
-http://dl.nwjs.io/v0.29.3/nwjs-v0.29.3-osx-x64.zip
 http://dl.nwjs.io/v0.29.3/nwjs-v0.29.3-linux-x64.tar.gz
-http://dl.nwjs.io/v0.29.3/nwjs-v0.29.3-linux-ia32.tar.gz
