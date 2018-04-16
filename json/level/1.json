@@ -1,6 +1,6 @@
 {
     "title": "Simple Exchange",
-    "goal": "letter",
+    "goal": {"name": "letter"},
     "map": [
         [
             {},

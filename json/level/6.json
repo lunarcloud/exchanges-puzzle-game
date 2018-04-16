@@ -1,6 +1,6 @@
 {
     "title": "Wetwork",
-    "goal": "letter",
+    "goal": {"name": "letter"},
     "map": [
         [
             {
@@ -9,7 +9,7 @@
                 "gives": {
                     "type": "npc",
                     "name": "spy",
-                    "desire": ["loadedgun"],
+                    "desire": ["gun-loaded"],
                     "gives": "letter"
                 }
             },
@@ -22,7 +22,7 @@
                 "type": "item",
                 "name": "bullet",
                 "desire": ["gun"],
-                "gives": "loadedgun"
+                "gives": "gun-loaded"
             }
         ],
         [
@@ -30,12 +30,12 @@
             {
                 "type": "none",
                 "name": "wall1",
-                "icon": "h-wall"
+                "icon": "wall-h"
             },
             {
                 "type": "none",
                 "name": "wall2",
-                "icon": "h-wall"
+                "icon": "wall-h"
 
             }
         ],
@@ -45,14 +45,14 @@
                 "name": "spy",
                 "desire": ["letter-distraction"],
                 "removes": ["spydestination"],
-                "holdup": ["loadedgun"]
+                "holdup": ["gun-loaded"]
             },
             {},
             {
                 "type": "item",
                 "name": "gun",
                 "desire": ["bullet"],
-                "gives": "loadedgun"
+                "gives": "gun-loaded"
             }
         ]
     ]

@@ -1,6 +1,6 @@
 {
     "title": "Mechanic's Helper",
-    "goal": "robot",
+    "goal": {"name": "robot"},
     "map": [
         [
             {},
@@ -15,29 +15,29 @@
         [
             {},
             {
-                "type": "item",
+                "type": "npc",
                 "name": "toolbox",
                 "desire": [
-                    "tool1",
-                    "tool2",
-                    "tool3"
+                    "hammer",
+                    "wrench",
+                    "screwdriver"
                 ],
                 "gives": "full-toolbox"
             },
             {
                 "type": "item",
-                "name": "tool2"
+                "name": "hammer"
             }
         ],
         [
             {
                 "type": "item",
-                "name": "tool1"
+                "name": "wrench"
             },
             {},
             {
                 "type": "item",
-                "name": "tool3"
+                "name": "screwdriver"
             }
         ]
     ]

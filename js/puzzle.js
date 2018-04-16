@@ -15,11 +15,58 @@ export class Puzzle {
         console.debug("Created Puzzle Controller");
     }
 
+    load(index, levelDefinition) {
+
+        this.index = index;
+        if (typeof(levelDefinition) !== "object") throw "level definition missing!";
+        this.originalDefinition = levelDefinition;
+
+
+        this.title = levelDefinition.title;
+        this.goal = levelDefinition.goal;
+        this.map = levelDefinition.map;
+
+        let goalIcon = typeof(this.goal.icon) === "string" ? this.goal.icon : this.goal.name;
+        this.replaceFocusOrGoal(this.goalElement, "media/sprites/" + goalIcon + ".svg", this.goal.name);
+        this.mapElement.innerHTML = ''; // clear
+        this.unfocus();
+
+        for (var i = 0; i < this.map.length; i++) {
+            let row = document.createElement("tr");
+            for (var j = 0; j < this.map[i].length; j++) {
+                let cell = this.generateCell('map-' + i + '-' + j, this.map[i][j]);
+                row.appendChild(cell);
+            }
+            this.mapElement.appendChild(row);
+        }
+
+        this.tapOrHoldHandler = new TapOrHoldHandler(true);
+        this.dragAndDropHandler = new DragAndDropHandler();
+
+        var tableCells = document.querySelectorAll("#map td");
+        for (var i = 0; i < tableCells.length; i++) {
+            this.tapOrHoldHandler.add(
+                tableCells[i],
+                node => this.focusOrCombine(node),
+                node => this.ask(node),
+                node => this.clearAsk(node)
+            );
+            this.dragAndDropHandler.add(
+                tableCells[i],
+                tableCells[i].getAttribute("type") == "item",
+                node => this.focus(node),
+                node => this.combine(node)
+            );
+        }
+        console.debug("Loaded Puzzle: " + this.title);
+    }
+
+
     generateCell(id, data) {
         var clone = document.importNode(
                 document.getElementById("item-cell").content.querySelector("td"),
                 true);
-        clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.png"';
+        clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.svg"';
         clone.id = id;
 
         if (typeof(data) !== "object" || typeof(data.type) !== "string" || typeof(data.name) !== "string") {
@@ -34,9 +81,8 @@ export class Puzzle {
                 }
             }
             clone.querySelector("img").src = 'media/sprites/'
-                + data.type + '/'
                 + (typeof(data.icon) === "string" ? data.icon : data.name)
-                + '.png';
+                + '.svg';
             clone.querySelector("label").textContent = data.name;
             if (typeof(data.desire) === typeof([]) && data.desire.length > 1) {
                 clone.querySelector("progress").setAttribute("max", data.desire.length);
@@ -71,51 +117,6 @@ export class Puzzle {
         }
     }
 
-    load(index, levelDefinition) {
-
-        this.index = index;
-        if (typeof(levelDefinition) !== "object") throw "level definition missing!";
-        this.originalDefinition = levelDefinition;
-
-
-        this.title = levelDefinition.title;
-        this.goal = levelDefinition.goal;
-        this.map = levelDefinition.map;
-
-        this.replaceFocusOrGoal(this.goalElement, "media/sprites/item/" + this.goal + ".png", this.goal);
-        this.mapElement.innerHTML = ''; // clear
-        this.unfocus();
-
-        for (var i = 0; i < this.map.length; i++) {
-            let row = document.createElement("tr");
-            for (var j = 0; j < this.map[i].length; j++) {
-                let cell = this.generateCell('map-' + i + '-' + j, this.map[i][j]);
-                row.appendChild(cell);
-            }
-            this.mapElement.appendChild(row);
-        }
-
-        this.tapOrHoldHandler = new TapOrHoldHandler(true);
-        this.dragAndDropHandler = new DragAndDropHandler();
-
-        var tableCells = document.querySelectorAll("#map td");
-        for (var i = 0; i < tableCells.length; i++) {
-            this.tapOrHoldHandler.add(
-                tableCells[i],
-                node => this.focusOrCombine(node),
-                node => this.ask(node),
-                node => this.clearAsk(node)
-            );
-            this.dragAndDropHandler.add(
-                tableCells[i],
-                tableCells[i].getAttribute("type") == "item",
-                node => this.focus(node),
-                node => this.combine(node)
-            );
-        }
-        console.debug("Loaded Puzzle: " + this.title);
-    }
-
     focusOrCombine(node) {
         if (this.focusTarget === node) {
             return;
@@ -144,7 +145,7 @@ export class Puzzle {
         node.classList.add("focusing");
         setTimeout(() => requestAnimationFrame(() => node.classList.remove("focusing")), 300);
 
-        this.replaceFocusOrGoal(this.focusDisplay, "media/sprites/item/" + name + ".png", name);
+        this.replaceFocusOrGoal(this.focusDisplay, "media/sprites/" + name + ".svg", name);
 
         this.checkWin();
     }
@@ -227,8 +228,10 @@ export class Puzzle {
         let askElem = document.importNode(document.getElementById("dialog-ask").content, true);
         for (var i = 0; i < desire.length; i++) {
             let itemElem = document.importNode(document.getElementById("item").content, true);
-            itemElem.querySelector("img").src = 'media/sprites/item/' + desire[i] + '.png';
+
             itemElem.querySelector("label").textContent = desire[i];
+            itemElem.querySelector("img").src = this.mapElement.querySelector("[name='" + desire[i] + "'] img").src;
+
             askElem.appendChild(itemElem);
         }
 
@@ -251,9 +254,10 @@ export class Puzzle {
         let holdElem = document.importNode(document.getElementById("dialog-hold-up").content, true);
 
         for (var i = 0; i < holdUpList.length; i++) {
-            let icon = document.querySelector("#map td[name=" + holdUpList[i] + "]").icon;
+            let holdingElem = document.querySelector("#map td[name=" + holdUpList[i] + "]");
+            let icon = holdingElem.hasAttribute("icon") ? holdingElem.getAttribute("icon") : holdingElem.getAttribute("name");
             let itemElem = document.importNode(document.getElementById("item").content, true);
-            itemElem.querySelector("img").src = 'media/sprites/item/' + icon + '.png';
+            itemElem.querySelector("img").src = 'media/sprites/' + icon + '.svg';
             itemElem.querySelector("label").textContent = holdUpList[i];
             holdElem.querySelector("items").appendChild(itemElem);
         }
@@ -285,7 +289,7 @@ export class Puzzle {
             var moreLevels = this.winHandler(this.index);
 
             var clone = document.importNode(document.getElementById("dialog-win").content, true);
-            clone.querySelector("img").src = 'media/sprites/item/' + this.goal + '.png';
+            clone.querySelector("img").src = this.goalElement.querySelector("img").src;
 
             this.dialog.innerHTML = '';
             this.dialog.appendChild(clone);

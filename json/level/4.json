@@ -1,6 +1,6 @@
 {
     "title": "Resident Info",
-    "goal": "letter",
+    "goal": {"name": "letter"},
     "map": [
         [
             {},
@@ -17,7 +17,7 @@
             {
                 "type": "none",
                 "name": "wall1",
-                "icon": "h-wall"
+                "icon": "wall-h"
                 
             },
             {
@@ -32,7 +32,7 @@
             {
                 "type": "none",
                 "name": "wall2",
-                "icon": "h-wall"
+                "icon": "wall-h"
             }
         ],
         [

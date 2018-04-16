@@ -175,14 +175,30 @@ body > game > aside > section:last-child {
     display: block;
 }
 
+#goal img, #focus img, #map img {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
+
 #goal img, #focus img, #map img, dialog img {
-    min-width: 32px;
-    min-height: 32px;
+    object-fit: contain;
+    max-width: 100%;
+/*    height: calc(100% - 3vh);*/
+    height: 100%;
+}
+
+#map td {
+    height: 25vh;
+}
+
+#map td img {
+    height: calc(25vh - 4vh);
 }
 
 #goal label, #focus label, #map label, dialog label {
-    display: block;
-    font-size: 3vh;
+/*    display: block;*/
+/*    font-size: 3vh;*/
+    display: none;
 }
 
 body > game > main {

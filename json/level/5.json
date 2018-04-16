@@ -1,17 +1,23 @@
 {
     "title": "Mutually Exclusive Brokers",
-    "goal": "fullmailbox",
+    "goal": {
+        "name": "full-mailbox",
+        "icon": "mailbox"
+    },
     "map": [
         [
             {
                 "type": "npc",
                 "name": "mailbox",
-                "desire": ["blueprint"],
+                "icon": "mailbox-open",
+                "desire": [
+                    "blueprint1",
+                    "blueprint2"
+                ],
                 "gives": {
-                    "type": "npc",
-                    "name": "mailbox",
-                    "desire": ["blueprint"],
-                    "gives": "fullmailbox"
+                    "type": "item",
+                    "name": "full-mailbox",
+                    "icon": "mailbox"
                 }
             },
             {},
@@ -21,21 +27,11 @@
             {},
             {
                 "type": "item",
-                "name": "notepad",
-                "failCombo": [
-                    "blueprint",
-                    "spy1",
-                    "spy2"
-                ]
+                "name": "notepad"
             },
             {
                 "type": "item",
-                "name": "notepad",
-                "failCombo": [
-                    "blueprint",
-                    "spy1",
-                    "spy2"
-                ]
+                "name": "notepad"
             }
         ],
         [
@@ -44,8 +40,12 @@
                 "name": "spy1",
                 "icon": "spy",
                 "desire": ["notepad"],
-                "gives": "blueprint",
-                "holdup": ["blueprint"]
+                "gives": {
+                    "type": "item",
+                    "name": "blueprint1",
+                    "icon": "blueprint"
+                },
+                "holdup": ["blueprint2"]
             },
             {},
             {
@@ -53,8 +53,12 @@
                 "name": "spy2",
                 "icon": "spy",
                 "desire": ["notepad"],
-                "gives": "blueprint",
-                "holdup": ["blueprint"]
+                "gives": {
+                    "type": "item",
+                    "name": "blueprint2",
+                    "icon": "blueprint"
+                },
+                "holdup": ["blueprint1"]
             }
         ]
     ]
