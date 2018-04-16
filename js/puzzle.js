@@ -80,9 +80,8 @@ export class Puzzle {
                     clone.setAttribute(i, data[i]);
                 }
             }
-            clone.querySelector("img").src = 'media/sprites/'
-                + (typeof(data.icon) === "string" ? data.icon : data.name)
-                + '.svg';
+            clone.querySelector("img").src = 'media/sprites/' + (typeof(data.icon) === "string" ? data.icon : data.name) + '.svg';
+            clone.querySelector("img").addEventListener("contextmenu", e => {e.preventDefault(); e.stopPropagation(); return false;});
             clone.querySelector("label").textContent = data.name;
             if (typeof(data.desire) === typeof([]) && data.desire.length > 1) {
                 clone.querySelector("progress").setAttribute("max", data.desire.length);
@@ -157,6 +156,10 @@ export class Puzzle {
 
     combine(node) {
         if (this.focusTarget === null || node == this.focusTarget) return;
+
+        if (node.nodeName == "IMG") {
+            node = node.parentElement;
+        }
 
         let focusName = this.focusTarget.getAttribute("name");
 
