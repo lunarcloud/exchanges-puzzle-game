@@ -51,11 +51,25 @@ export class Puzzle {
                 node => this.ask(node),
                 node => this.clearAsk(node)
             );
-            this.dragAndDropHandler.add(
+
+            if (tableCells[i].getAttribute("type") == "item") {
+                this.dragAndDropHandler.addDragHandler(
+                    "dummy drag data",
+                    tableCells[i],
+                    node => this.focus(node),
+                    tableCells[i].querySelector("img")
+                );
+                this.dragAndDropHandler.addDragHandler(
+                    "dummy drag data",
+                    tableCells[i].querySelector("img"),
+                    node => this.focus(node),
+                    tableCells[i].querySelector("img")
+                );
+            }
+            this.dragAndDropHandler.addDropHandler(
                 tableCells[i],
-                tableCells[i].getAttribute("type") == "item",
-                node => this.focus(node),
-                node => this.combine(node)
+                node => this.combine(node),
+                true
             );
         }
         console.debug("Loaded Puzzle: " + this.title);
@@ -63,11 +77,10 @@ export class Puzzle {
 
 
     generateCell(id, data) {
-        var clone = document.importNode(
-                document.getElementById("item-cell").content.querySelector("td"),
-                true);
-        clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.svg"';
+        var clone = document.importNode(document.getElementById("item-cell").content.querySelector("td"), true);
         clone.id = id;
+        clone.querySelector("img").alt = id;
+        clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.svg"';
 
         if (typeof(data) !== "object" || typeof(data.type) !== "string" || typeof(data.name) !== "string") {
             clone.innerHTML = ''; // empty cell
@@ -82,7 +95,6 @@ export class Puzzle {
             }
             clone.querySelector("img").src = 'media/sprites/' + (typeof(data.icon) === "string" ? data.icon : data.name) + '.svg';
             clone.querySelector("img").addEventListener("contextmenu", e => {e.preventDefault(); e.stopPropagation(); return false;});
-            clone.querySelector("label").textContent = data.name;
             if (typeof(data.desire) === typeof([]) && data.desire.length > 1) {
                 clone.querySelector("progress").setAttribute("max", data.desire.length);
             }
@@ -90,14 +102,12 @@ export class Puzzle {
         return clone;
     }
 
-    replaceFocusOrGoal(element, img, label) {
-        var clone = document.importNode(
-                document.getElementById("focus-or-goal-content").content,
-                true);
+    replaceFocusOrGoal(element, img, name) {
+        var clone = document.importNode(document.getElementById("focus-or-goal-content").content, true);
         clone.querySelector("img").src = img;
-        clone.querySelector("label").textContent = label;
         element.innerHTML = '';
         element.appendChild(clone);
+        element.setAttribute("name", name);
     }
 
     getArrayFromAttr(node, name) {
@@ -127,8 +137,13 @@ export class Puzzle {
     }
 
     focus(node) {
+        if (node.nodeName == "IMG") {
+            node = node.parentElement;
+        }
+
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
+        let icon = node.hasAttribute("icon") ? node.getAttribute("icon") : node.getAttribute("name");
 
         if (type != "item") {
             this.unfocus();
@@ -144,13 +159,13 @@ export class Puzzle {
         node.classList.add("focusing");
         setTimeout(() => requestAnimationFrame(() => node.classList.remove("focusing")), 300);
 
-        this.replaceFocusOrGoal(this.focusDisplay, "media/sprites/" + name + ".svg", name);
-
+        this.replaceFocusOrGoal(this.focusDisplay, "media/sprites/" + icon + ".svg", name);
         this.checkWin();
     }
 
     unfocus() {
         this.focusDisplay.innerHTML = '';
+        this.focusDisplay.removeAttribute("name");
         this.focusTarget = null;
     }
 
@@ -209,10 +224,8 @@ export class Puzzle {
                     progressbar.value++;
                     if (progressbar.value >= progressbar.max) {
                         console.debug("Dropping " + gives.name + ".");
-                        node.parentElement.replaceChild(
-                            puzzle.generateCell(node.id, gives),
-                            node);
-                        puzzle.focus(document.getElementById(id));
+                        node.parentElement.replaceChild(puzzle.generateCell(node.id, gives), node);
+                        puzzle.focus(document.getElementById(node.id));
                     }
                 }, 100);
             }
@@ -229,13 +242,13 @@ export class Puzzle {
         let holdup = this.getArrayFromAttr(node, "holdup");
 
         let askElem = document.importNode(document.getElementById("dialog-ask").content, true);
+        let askItems = askElem.querySelector("items");
         for (var i = 0; i < desire.length; i++) {
+            if (this.mapElement.querySelector("[name='" + desire[i] + "']") == null) continue;
+
             let itemElem = document.importNode(document.getElementById("item").content, true);
-
-            itemElem.querySelector("label").textContent = desire[i];
             itemElem.querySelector("img").src = this.mapElement.querySelector("[name='" + desire[i] + "'] img").src;
-
-            askElem.appendChild(itemElem);
+            askItems.appendChild(itemElem);
         }
 
         this.dialog.innerHTML = "";
@@ -250,10 +263,7 @@ export class Puzzle {
     }
 
     holdUpDialog(holdUpList) {
-        var clone = document.importNode(
-                document.getElementById("dialog-hold-up").content,
-                true);
-
+        var clone = document.importNode(document.getElementById("dialog-hold-up").content, true);
         let holdElem = document.importNode(document.getElementById("dialog-hold-up").content, true);
 
         for (var i = 0; i < holdUpList.length; i++) {
@@ -261,7 +271,6 @@ export class Puzzle {
             let icon = holdingElem.hasAttribute("icon") ? holdingElem.getAttribute("icon") : holdingElem.getAttribute("name");
             let itemElem = document.importNode(document.getElementById("item").content, true);
             itemElem.querySelector("img").src = 'media/sprites/' + icon + '.svg';
-            itemElem.querySelector("label").textContent = holdUpList[i];
             holdElem.querySelector("items").appendChild(itemElem);
         }
 
@@ -270,7 +279,6 @@ export class Puzzle {
 
         try{
             this.dialog.showModal();
-            requestAnimationFrame(() => node.classList.add("asking"));
         } catch(error) {
             // not important
         }
@@ -287,7 +295,7 @@ export class Puzzle {
     }
 
     checkWin() {
-        if (this.focusDisplay.querySelector("label").textContent == this.goalElement.querySelector("label").textContent) {
+        if (this.focusDisplay.getAttribute("name") == this.goalElement.getAttribute("name")) {
 
             var moreLevels = this.winHandler(this.index);
 

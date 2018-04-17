@@ -49,23 +49,14 @@ body > game {
     padding: 0;
 }
 
-dialog {
-    z-index: 90;
-    min-width: 40vw;
-}
-
 body > menu {
     opacity: 1;
     transition: opacity 1s ease-in-out;
     z-index: 1;
 
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 10vh 75vh 15vh;
     text-align: center;
-    justify-content: space-between;
-
-    min-width: fit-content;
-    min-width: -moz-fit-content;
 }
 
 body > menu > h1 {
@@ -75,13 +66,16 @@ body > menu > h1 {
 }
 
 #level-list {
-    margin-top: 0;
-    margin-bottom: 1vh;
-    height: 100%;
-    list-style-position: inside;
-    font-size: 4vh;
-    font-size: calc(3vh + 3vw);
+    overflow: auto;
     text-align: left;
+    list-style-position: inside;
+    font-size: 6vw;
+}
+
+@media screen and (min-aspect-ratio: 4/3) {
+    #level-list {
+        font-size: 8vh;
+    }
 }
 
 #level-list li:not([disabled]) {
@@ -94,15 +88,14 @@ body > menu > h1 {
 }
 
 body > menu > #fullscreen-button {
-    grid-row: 2;
-    grid-column: 1;
-    padding: 2vh 3vh;
+    padding: 2vh 3vw;
     width: fit-content;
     height: fit-content;
     width: -moz-fit-content;
     height: -moz-fit-content;
-    margin-bottom: 1vw;
+    margin-bottom: 1vh;
     margin-left: 1vw;
+    margin-top: 1vh;
 }
 
 .big-button {
@@ -275,18 +268,41 @@ dialog button {
 dialog::backdrop { /* native */
     background-color: rgba(0,0,0,0.6);
 }
+
 dialog + .backdrop { /* polyfill */
     background-color: rgba(0,0,0,0.6);
 }
+
 dialog {
+    z-index: 9000;
     position: fixed;
     top: 50%;
     transform: translate(0, -50%);
-    max-height: 100vh;
+    max-height: 75vh;
+    overflow: hidden;
     text-align: center;
+    display: grid;
+    grid-template-rows: 8vh 50vh 8vh;
 }
-dialog img {
-    height: 25vh;
+dialog footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+dialog footer > * {
+    flex-grow: 1;
+}
+items {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    width: -moz-fit-content;
+}
+
+items > item {
+    flex-shrink: 1;
+    flex-grow: 1;
 }
 
 #map progress[max=''],

@@ -74,6 +74,7 @@
             <section>
                 <button id="fullscreen-button2" class="big-button">▣</button>
                 <button id="back-to-menu-button" class="big-button">↶</button>
+                <button id="retry-button" class="big-button">↻</button>
             </section>
         </aside>
         <main>
@@ -83,8 +84,9 @@
     <dialog></dialog>
     <templates>
         <template id="item">
-            <img src="">
-            <label></label>
+            <item>
+                <img src="" draggable="false">
+            </item>
         </template>
         <template id="dialog-ask">
             <h2>Wants</h2>
@@ -93,26 +95,28 @@
         <template id="dialog-hold-up">
             <h2>Held Up By</h2>
             <items></items>
-            <button class="big-button" onclick="this.parentElement.close();">&times;</button>
+            <footer>
+                <button class="big-button" onclick="this.parentElement.parentElement.close();">&times;</button>
+            </footer>
         </template>
         <template id="dialog-win">
             <h2>You Won!</h2>
-            <img src="">
-            <!--label></label-->
-            <br>
-            <button id="win-menu" class="big-button">↶</button>
-            <button id="win-next" class="big-button">⏭</button>
+            <img src="" draggable="false">
+            <footer>
+                <button id="win-menu" class="big-button">↶</button>
+                <button id="win-next" class="big-button">⏭</button>
+            </footer>
         </template>
         <template id="item-cell">
             <td id="">
-                <img src="">
-                <label></label>
-                <progress value="0" max="1"></progress>
+                <img src="" draggable="false">
+                <footer>
+                    <progress value="0" max="1"></progress>
+                </footer>
             </td>
         </template>
         <template id="focus-or-goal-content">
-            <img src="">
-            <label></label>
+            <img src="" draggable="false">
         </template>
     </templates>
   </body>

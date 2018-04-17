@@ -6,17 +6,21 @@ export class Menu {
 
         var menu = this;
 
+        this.currentIndex = 1;
+
         this.menuPane = document.querySelector("body > menu");
         this.levelListElement = document.getElementById("level-list");
         this.gamePane = document.querySelector("body > game");
         this.fullscreenButton = document.getElementById("fullscreen-button");
         this.fullscreenButton2 = document.getElementById("fullscreen-button2");
         this.backToMenuButton = document.getElementById("back-to-menu-button");
+        this.retryButton = document.getElementById("retry-button");
 
         this.dialog = document.querySelector('dialog');
         dialogPolyfill.registerDialog(this.dialog);
 
         this.backToMenuButton.addEventListener("click", e => this.show());
+        this.retryButton.addEventListener("click", e => this.loadLevel(this.currentIndex));
         this.fullscreenButton.addEventListener("click", e => Utils.fullscreenToggle());
         this.fullscreenButton2.addEventListener("click", e => Utils.fullscreenToggle());
 
@@ -116,10 +120,12 @@ export class Menu {
     }
 
     loadLevel(index) {
+        this.currentIndex = index;
+        var menu = this;
         return new Promise((resolve, reject) => {
             try {
-                this.puzzle.load(index, this.levels[index-1]);
-                this.hide();
+                menu.puzzle.load(index, menu.levels[menu.currentIndex - 1]);
+                menu.hide();
                 resolve();
             } catch(error) {
                 alert("Level " + index + " is not correctly defined!");
