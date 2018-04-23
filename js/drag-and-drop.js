@@ -30,8 +30,7 @@ export class DragAndDropHandler {
             e.dataTransfer.dropEffect = 'copy';
             return false;
         });
-        node.addEventListener('dragenter', e => { node.classList.add('over'); return false; }); // IE only?
-        node.addEventListener('dragleave', function () { node.classList.remove('over'); });
+        node.addEventListener('dragleave', () => node.classList.remove('over'));
 
         node.addEventListener('drop', e => {
             if (e.stopPropagation) e.stopPropagation();

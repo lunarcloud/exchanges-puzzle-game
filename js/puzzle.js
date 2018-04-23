@@ -31,9 +31,9 @@ export class Puzzle {
         this.mapElement.innerHTML = ''; // clear
         this.unfocus();
 
-        for (var i = 0; i < this.map.length; i++) {
+        for (let i = 0; i < this.map.length; i++) {
             let row = document.createElement("tr");
-            for (var j = 0; j < this.map[i].length; j++) {
+            for (let j = 0; j < this.map[i].length; j++) {
                 let cell = this.generateCell('map-' + i + '-' + j, this.map[i][j]);
                 row.appendChild(cell);
             }
@@ -44,7 +44,7 @@ export class Puzzle {
         this.dragAndDropHandler = new DragAndDropHandler();
 
         var tableCells = document.querySelectorAll("#map td");
-        for (var i = 0; i < tableCells.length; i++) {
+        for (let i = 0; i < tableCells.length; i++) {
             this.tapOrHoldHandler.add(
                 tableCells[i],
                 node => this.focusOrCombine(node),
@@ -153,7 +153,7 @@ export class Puzzle {
         if (node == this.focusTarget) return;
         console.debug("Focus: " + type + " | " + name);
 
-        let previousTarget = this.focusTarget;
+        //let previousTarget = this.focusTarget;
         this.focusTarget = node;
 
         node.classList.add("focusing");
@@ -179,7 +179,7 @@ export class Puzzle {
         let focusName = this.focusTarget.getAttribute("name");
 
         let name = node.getAttribute("name");
-        let type = node.getAttribute("type");
+        //let type = node.getAttribute("type");
         let desire = this.getArrayFromAttr(node, "desire");
         let gives = this.getGivesFromNode(node, "gives");
         let holdUp = this.getArrayFromAttr(node, "holdup");
@@ -191,7 +191,7 @@ export class Puzzle {
         if (desire.includes(focusName)) {
 
             let holdUpCount = 0;
-            for (var i = 0; i < holdUp.length; i++) {
+            for (let i = 0; i < holdUp.length; i++) {
                 let elem = document.querySelector("#map td[name=" + holdUp[i] + "]");
                 if (typeof(elem) !== "undefined" && elem !== null) holdUpCount++;
             }
@@ -203,10 +203,9 @@ export class Puzzle {
             } else {
 
                 console.debug("Combine " + name + " with " + focusName + ".");
-                let id = node.id;
                 let progressbar = node.querySelector("progress");
 
-                for (var i = 0; i < removes.length; i++) {
+                for (let i = 0; i < removes.length; i++) {
                     let elem = document.querySelector("#map td[name=" + removes[i] + "]");
                     if (typeof(elem) === "undefined" || elem === null) continue;
 
@@ -235,15 +234,12 @@ export class Puzzle {
     }
 
     ask(node) {
-        let type = node.getAttribute("type");
-        let name = node.getAttribute("name");
         let desire = this.getArrayFromAttr(node, "desire");
         if (desire.length < 1) return;
-        let holdup = this.getArrayFromAttr(node, "holdup");
 
         let askElem = document.importNode(document.getElementById("dialog-ask").content, true);
         let askItems = askElem.querySelector("items");
-        for (var i = 0; i < desire.length; i++) {
+        for (let i = 0; i < desire.length; i++) {
             if (this.mapElement.querySelector("[name='" + desire[i] + "']") == null) continue;
 
             let itemElem = document.importNode(document.getElementById("item").content, true);
@@ -263,10 +259,9 @@ export class Puzzle {
     }
 
     holdUpDialog(holdUpList) {
-        var clone = document.importNode(document.getElementById("dialog-hold-up").content, true);
         let holdElem = document.importNode(document.getElementById("dialog-hold-up").content, true);
 
-        for (var i = 0; i < holdUpList.length; i++) {
+        for (let i = 0; i < holdUpList.length; i++) {
             let holdingElem = document.querySelector("#map td[name=" + holdUpList[i] + "]");
             let icon = holdingElem.hasAttribute("icon") ? holdingElem.getAttribute("icon") : holdingElem.getAttribute("name");
             let itemElem = document.importNode(document.getElementById("item").content, true);
@@ -305,9 +300,14 @@ export class Puzzle {
             this.dialog.innerHTML = '';
             this.dialog.appendChild(clone);
 
+            /* eslint-disable no-unused-vars */
             document.getElementById("win-menu").addEventListener("click", e => this.returnHandler());
-            if (moreLevels) document.getElementById("win-next").addEventListener("click", e => this.nextHandler(this.index));
-            else document.getElementById("win-next").parentElement.removeChild(document.getElementById("win-next"));
+            if (moreLevels) {
+                document.getElementById("win-next").addEventListener("click", e => this.nextHandler(this.index));
+            } else {
+                document.getElementById("win-next").parentElement.removeChild(document.getElementById("win-next"));
+            }
+            /* eslint-enable no-unused-vars */
 
             try{
                 this.dialog.showModal();

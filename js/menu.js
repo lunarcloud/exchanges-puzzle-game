@@ -19,10 +19,12 @@ export class Menu {
         this.dialog = document.querySelector('dialog');
         dialogPolyfill.registerDialog(this.dialog);
 
+        /* eslint-disable no-unused-vars */
         this.backToMenuButton.addEventListener("click", e => this.show());
         this.retryButton.addEventListener("click", e => this.loadLevel(this.currentIndex));
         this.fullscreenButton.addEventListener("click", e => Utils.fullscreenToggle());
         this.fullscreenButton2.addEventListener("click", e => Utils.fullscreenToggle());
+        /* eslint-enable no-unused-vars */
 
         this.puzzle = new Puzzle(
             menu.dialog,
@@ -51,7 +53,7 @@ export class Menu {
             }
 
             this.levelListElement.innerHTML = "";
-            for (var i = 0; i < menu.levels.length; i++) {
+            for (let i = 0; i < menu.levels.length; i++) {
                 menu.addLevelToList(i+1, menu.levels[i].title, (i + 1) <= menu.progression.unlocked, menu.progression.levels[i]);
             }
 
@@ -89,7 +91,7 @@ export class Menu {
         });
     }
 
-    addLevelToList(index, name, enabled, progress) {
+    addLevelToList(index, name, enabled) {
         var menu = this;
         var item = document.createElement('li');
         //item.id = "level-" + index;
@@ -133,4 +135,4 @@ export class Menu {
             }
         });
     }
-};
+}
