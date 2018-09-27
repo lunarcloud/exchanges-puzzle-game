@@ -10,7 +10,13 @@ You'll only need the main mouse button and/or a finger for your touchscreen:
 
 This was an entry for the [Linux Game Jam 2018](https://itch.io/jam/linux-game-jam-2018), and is hosted on [itch.io](https://samsarette.itch.io/exchanges)
 
-# Web Features
+# Development
+Icons were drawn with Krita and exported to SVG, Levels are defined as JSON files.
+There is a script that packages up the game with NWJS, but it's only setup to produce an Ubuntu package file and not for other OSes.
+Since there's only one CSS file and one HTML file, they live at the root, no need for subfolders.
+Polyfills were used for [native HTML dialogs](https://github.com/GoogleChrome/dialog-polyfill) and [fullscreen support](https://github.com/sindresorhus/screenfull.js/).
+
+## Web Features
 This project was an exercise in developing a modern web project with no frameworks and as many useful features as all platforms now support.
 In that vein, here's the web platform features I was particularly interested in getting to use, originally based on [this document](https://docs.google.com/document/d/14UXVubbQEP-4PO832kH4HpRE9S3NaVBGhfuQDwh2_Y8/):
  * Web App Manifest
@@ -33,5 +39,5 @@ In that vein, here's the web platform features I was particularly interested in 
 
 Additionally, ESLint was used to double-check the code.
 
-# P.S.
+## P.S.
 If you attempt to open the html file instead of using a server, the levels will not load.
