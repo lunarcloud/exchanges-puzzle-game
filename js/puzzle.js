@@ -45,42 +45,42 @@ export class Puzzle {
 
         var tableCells = document.querySelectorAll("#map td");
         for (let i = 0; i < tableCells.length; i++) {
-            this.tapOrHoldHandler.add(
-                tableCells[i],
-                node => this.focusOrCombine(node),
-                node => this.ask(node),
-                node => this.clearAsk(node)
-            );
-
-            if (tableCells[i].getAttribute("type") == "item") {
-                this.dragAndDropHandler.addDragHandler(
-                    "dummy drag data",
-                    tableCells[i],
-                    node => this.focus(node),
-                    tableCells[i].querySelector("img")
-                );
-                this.dragAndDropHandler.addDragHandler(
-                    "dummy drag data",
-                    tableCells[i].querySelector("img"),
-                    node => this.focus(node),
-                    tableCells[i].querySelector("img")
-                );
-            }
-            this.dragAndDropHandler.addDropHandler(
-                tableCells[i],
-                node => this.combine(node),
-                true
-            );
+            this.addCellHandler(tableCells[i]);
         }
         console.debug("Loaded Puzzle: " + this.title);
     }
+	
+	addCellHandler(cell) {
+		this.tapOrHoldHandler.add(
+			cell,
+			node => this.focusOrCombine(node),
+			node => this.ask(node),
+			node => this.clearAsk(node)
+		);
+
+		if (cell.getAttribute("type") == "item") {
+			let imageElem = cell.querySelector("img");
+			let focusAction = node => this.focus(node);
+			this.dragAndDropHandler.addDragHandler(cell.id, cell, focusAction, imageElem);
+			this.dragAndDropHandler.addDragHandler(cell.id, imageElem, focusAction, imageElem);
+		}
+		this.dragAndDropHandler.addDropHandler(cell, (node, sourceid) => this.combine(node));
+	}
+	
+	removeCellHandler(cell) {
+		this.tapOrHoldHandler.remove(cell);
+		
+		if (cell.getAttribute("type") == "item") {
+			this.dragAndDropHandler.removeDragHandler(cell);
+			this.dragAndDropHandler.removeDragHandler(cell.querySelector("img"));
+		}
+		this.dragAndDropHandler.removeDropHandler(cell);
+	}
 
 
     generateCell(id, data) {
         var clone = document.importNode(document.getElementById("item-cell").content.querySelector("td"), true);
         clone.id = id;
-        clone.querySelector("img").alt = id;
-        clone.querySelector("img").src = '"media/sprites/' + data.type + '/' + data.name + '.svg"';
 
         if (typeof(data) !== "object" || typeof(data.type) !== "string" || typeof(data.name) !== "string") {
             clone.innerHTML = ''; // empty cell
@@ -93,8 +93,13 @@ export class Puzzle {
                     clone.setAttribute(i, data[i]);
                 }
             }
-            clone.querySelector("img").src = 'media/sprites/' + (typeof(data.icon) === "string" ? data.icon : data.name) + '.svg';
-            clone.querySelector("img").addEventListener("contextmenu", e => {e.preventDefault(); e.stopPropagation(); return false;});
+			
+			clone.querySelector("img").id = id+"-img";
+			clone.querySelector("img").alt = id;
+			if (data.type !== "hidden") {
+				clone.querySelector("img").src = 'media/sprites/' + (typeof(data.icon) === "string" ? data.icon : data.name) + '.svg';
+			}
+			clone.querySelector("img").addEventListener("contextmenu", e => {e.preventDefault(); e.stopPropagation(); return false;});
             if (typeof(data.desire) === typeof([]) && data.desire.length > 1) {
                 clone.querySelector("progress").setAttribute("max", data.desire.length);
             }
@@ -187,7 +192,6 @@ export class Puzzle {
 
         var puzzle = this;
 
-        /* TODO fix that this only works dragging td to td */
         if (desire.includes(focusName)) {
 
             let holdUpCount = 0;
@@ -197,11 +201,9 @@ export class Puzzle {
             }
 
             if (holdUpCount > 0) {
-
                 this.unfocus();
                 this.holdUpDialog(holdUp);
             } else {
-
                 console.debug("Combine " + name + " with " + focusName + ".");
                 let progressbar = node.querySelector("progress");
 
@@ -209,22 +211,26 @@ export class Puzzle {
                     let elem = document.querySelector("#map td[name=" + removes[i] + "]");
                     if (typeof(elem) === "undefined" || elem === null) continue;
 
-                    let removeGives = this.getGivesFromNode(elem, "gives");
-                    elem.parentElement.replaceChild(puzzle.generateCell(elem.id, removeGives), elem);
+                    let removeGives = puzzle.generateCell(elem.id, this.getGivesFromNode(elem, "gives"));
+                    elem.parentElement.replaceChild(removeGives, elem);
+					
+					puzzle.removeCellHandler(elem);
+					puzzle.addCellHandler(removeGives);
                 }
 
-                puzzle.focusTarget.parentElement.replaceChild(
-                            puzzle.generateCell(puzzle.focusTarget.id, {}),
-                            puzzle.focusTarget);
-
+                puzzle.focusTarget.parentElement.replaceChild(puzzle.generateCell(puzzle.focusTarget.id, {}), puzzle.focusTarget);
                 puzzle.unfocus();
-
+				
                 setTimeout(() => {
                     progressbar.value++;
                     if (progressbar.value >= progressbar.max) {
                         console.debug("Dropping " + gives.name + ".");
-                        node.parentElement.replaceChild(puzzle.generateCell(node.id, gives), node);
-                        puzzle.focus(document.getElementById(node.id));
+						let newNode = puzzle.generateCell(node.id, gives);
+                        node.parentElement.replaceChild(newNode, node);
+                        puzzle.focus(newNode);
+						
+						puzzle.removeCellHandler(node);
+						puzzle.addCellHandler(newNode);
                     }
                 }, 100);
             }

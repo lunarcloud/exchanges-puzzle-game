@@ -131,6 +131,7 @@ export class Menu {
                 resolve();
             } catch(error) {
                 alert("Level " + index + " is not correctly defined!");
+				console.error(error);
                 reject();
             }
         });

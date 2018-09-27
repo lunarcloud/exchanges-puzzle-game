@@ -11,14 +11,17 @@ export class TapOrHoldHandler {
         this.holding = null;
         this.presstimer = null;
 
-        document.addEventListener("click", e => this.click(e), {passive: true});
-        document.addEventListener("mousedown", e => this.start(e), {passive: true});
-        document.addEventListener("touchstart", e => this.start(e), {passive: true});
-        document.addEventListener("mouseout", e => this.cancel(e), {passive: true});
-        document.addEventListener("mouseup", e => this.cancel(e), {passive: true});
-        document.addEventListener("touchend", e => this.cancel(e), {passive: true});
-        document.addEventListener("touchleave", e => this.cancel(e), {passive: true});
-        document.addEventListener("touchcancel", e => this.cancel(e), {passive: true});
+		document.addEventListener("click", e => this.click(e), {passive: true});
+		
+		["mousedown",
+		"touchstart"].forEach(event => document.addEventListener(event, e => this.start(e), {passive: true}));
+		
+		["mouseout",
+		"mouseup",
+		"dragleave",
+		"touchend", 
+		"touchleave",
+		"touchcancel"].forEach(event => document.addEventListener(event, e => this.cancel(e), {passive: true}));
     }
 
     add(node, onTap, onHold, onRelease) {
@@ -27,6 +30,12 @@ export class TapOrHoldHandler {
         if (typeof(onRelease) == "function") this.onRelease[node] = onRelease;
     }
 
+    remove(node) {
+        if (node in this.onTap) delete this.onTap[node];
+        if (node in this.onHold) delete this.onHold[node];
+        if (node in this.onRelease) delete this.onRelease[node];
+    }
+	
     clear() {
         this.onTap = {};
         this.onHold = {};

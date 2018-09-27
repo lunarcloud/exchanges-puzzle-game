@@ -1,3 +1,4 @@
+import {Utils} from './utils.js';
 
 export class DragAndDropHandler {
     constructor() {
@@ -7,6 +8,7 @@ export class DragAndDropHandler {
     addDragHandler(data, node, onStartDrag, img) {
 
         if (typeof(onStartDrag) !== "function") throw "You didn't define a drag start function!";
+		if (typeof(node.id) !== "string" || node.id === "") throw "Node doesn't have an id!";
         this.onStartDrag[node.id] = onStartDrag;
 
         node.setAttribute('draggable', 'true');
@@ -14,14 +16,18 @@ export class DragAndDropHandler {
         node.addEventListener('dragstart', e => {
             e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
             e.dataTransfer.setData('Text', data); // required otherwise doesn't work
+			if ('id' in node === false || node.id in this.onStartDrag === false) {
+				console.error("Can't call drag start function!");
+			}
             this.onStartDrag[node.id](node);
             if (img) e.dataTransfer.setDragImage( img, img.width * 0.9, img.height * 0.9);
         });
     }
 
-    addDropHandler(node, onDrop, checkParentIfFail) {
+    addDropHandler(node, onDrop) {
 
         if (typeof(onDrop) !== "function") throw "You didn't define a drop function!";
+		if (typeof(node.id) !== "string") throw "Node doesn't have an id!";
         this.onDrop[node.id] = onDrop;
 
         node.addEventListener('dragover', e => {
@@ -35,21 +41,26 @@ export class DragAndDropHandler {
         node.addEventListener('drop', e => {
             if (e.stopPropagation) e.stopPropagation();
             e.preventDefault();
-
-            var node = document.getElementById(e.originalTarget.id);
-            if (node == null) {
-                node = document.getElementById(e.originalTarget.alt);
-            }
-
-            if (typeof(this.onDrop[node.id]) === "function") {
-                this.onDrop[node.id](e.target, node);
-            } else if (checkParentIfFail !== false && typeof(this.onDrop[node.parentElement.id]) === "function") {
-                this.onDrop[node.parentElement.id](e.target, node.parentElement);
-            }
+			
+			Utils.checkHereUp(e.target, elem => {
+				let hasDropAction = 'id' in elem && elem.id in this.onDrop;
+				if (hasDropAction) {
+					this.onDrop[elem.id](elem, e.dataTransfer.getData('Text'));
+				}
+				return hasDropAction;
+			});
 
             return false;
         });
     }
+	
+	removeDragHandler(node) {
+		if (node && node.id in this.onStartDrag) delete this.onStartDrag[node.id];
+	}
+	
+	removeDropHandler(node) {
+		if (node && node.id in this.onDrop) delete this.onDrop[node.id];
+	}
 
     clearHandlers() {
         this.onStartDrag = {};
