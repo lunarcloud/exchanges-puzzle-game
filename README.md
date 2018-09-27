@@ -13,6 +13,7 @@ This was an entry for the [Linux Game Jam 2018](https://itch.io/jam/linux-game-j
 # Web Features
 This project was an exercise in developing a modern web project with no frameworks and as many useful features as all platforms now support.
 In that vein, here's the web platform features I was particularly interested in getting to use, originally based on [this document](https://docs.google.com/document/d/14UXVubbQEP-4PO832kH4HpRE9S3NaVBGhfuQDwh2_Y8/):
+ * Web App Manifest
  * Semantic elements
  * SVG images
  * System UI Font
