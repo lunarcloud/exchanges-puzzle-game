@@ -1,6 +1,6 @@
 {
     "title": "Mechanic's Helper",
-    "goal": {"name": "robot"},
+    "goal": "robot",
     "map": [
         [
             {},

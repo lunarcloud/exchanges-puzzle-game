@@ -1,6 +1,11 @@
 {
     "title": "Wetwork",
-    "goal": {"name": "letter"},
+    "goal": "letter",
+	"icons": {
+		"letter-distraction": "letter",
+		"wall1": "wall-h",
+		"wall2": "wall-h"
+	},
     "map": [
         [
             {
@@ -15,8 +20,7 @@
             },
             {
                 "type": "item",
-                "name": "letter-distraction",
-                "icon": "letter"
+                "name": "letter-distraction"
             },
             {
                 "type": "item",
@@ -29,13 +33,11 @@
             {},
             {
                 "type": "none",
-                "name": "wall1",
-                "icon": "wall-h"
+                "name": "wall1"
             },
             {
                 "type": "none",
-                "name": "wall2",
-                "icon": "wall-h"
+                "name": "wall2"
 
             }
         ],

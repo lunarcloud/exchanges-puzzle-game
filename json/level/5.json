@@ -1,23 +1,26 @@
 {
     "title": "Mutually Exclusive Brokers",
-    "goal": {
-        "name": "full-mailbox",
-        "icon": "mailbox"
-    },
+    "goal": "full-mailbox",
+	"icons": {
+		"blueprint1": "blueprint",
+		"blueprint2": "blueprint",
+		"full-mailbox": "mailbox",
+		"mailbox": "mailbox-open",
+		"spy1": "spy",
+		"spy2": "spy"
+	},
     "map": [
         [
             {
                 "type": "npc",
                 "name": "mailbox",
-                "icon": "mailbox-open",
                 "desire": [
                     "blueprint1",
                     "blueprint2"
                 ],
                 "gives": {
                     "type": "item",
-                    "name": "full-mailbox",
-                    "icon": "mailbox"
+                    "name": "full-mailbox"
                 }
             },
             {},
@@ -38,12 +41,10 @@
             {
                 "type": "npc",
                 "name": "spy1",
-                "icon": "spy",
                 "desire": ["notepad"],
                 "gives": {
                     "type": "item",
-                    "name": "blueprint1",
-                    "icon": "blueprint"
+                    "name": "blueprint1"
                 },
                 "holdup": ["blueprint2"]
             },
@@ -51,12 +52,10 @@
             {
                 "type": "npc",
                 "name": "spy2",
-                "icon": "spy",
                 "desire": ["notepad"],
                 "gives": {
                     "type": "item",
-                    "name": "blueprint2",
-                    "icon": "blueprint"
+                    "name": "blueprint2"
                 },
                 "holdup": ["blueprint1"]
             }

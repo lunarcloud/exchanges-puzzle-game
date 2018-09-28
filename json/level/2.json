@@ -1,6 +1,6 @@
 {
     "title": "Not While They Watch",
-    "goal": {"name": "letter"},
+    "goal": "letter",
     "map": [
         [
             {},

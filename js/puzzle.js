@@ -21,13 +21,13 @@ export class Puzzle {
         if (typeof(levelDefinition) !== "object") throw "level definition missing!";
         this.originalDefinition = levelDefinition;
 
-
         this.title = levelDefinition.title;
         this.goal = levelDefinition.goal;
         this.map = levelDefinition.map;
+        this.icons = typeof(levelDefinition.icons) === "object" ? levelDefinition.icons : {};
 
-        let goalIcon = typeof(this.goal.icon) === "string" ? this.goal.icon : this.goal.name;
-        this.replaceFocusOrGoal(this.goalElement, "media/sprites/" + goalIcon + ".svg", this.goal.name);
+        let goalIcon = typeof(this.icons[this.goal]) === "string" ? this.icons[this.goal] : this.goal;
+        this.replaceFocusOrGoal(this.goalElement, "media/sprites/" + goalIcon + ".svg", this.goal);
         this.mapElement.innerHTML = ''; // clear
         this.unfocus();
 
@@ -97,7 +97,9 @@ export class Puzzle {
 			clone.querySelector("img").id = id+"-img";
 			clone.querySelector("img").alt = id;
 			if (data.type !== "hidden") {
-				clone.querySelector("img").src = 'media/sprites/' + (typeof(data.icon) === "string" ? data.icon : data.name) + '.svg';
+				let icon = typeof(this.icons[data.name]) === "string" ? this.icons[data.name] : data.name;
+				clone.setAttribute("icon", icon);
+				clone.querySelector("img").src = 'media/sprites/' + icon + '.svg';
 			}
 			clone.querySelector("img").addEventListener("contextmenu", e => {e.preventDefault(); e.stopPropagation(); return false;});
             if (typeof(data.desire) === typeof([]) && data.desire.length > 1) {
@@ -148,7 +150,7 @@ export class Puzzle {
 
         let type = node.getAttribute("type");
         let name = node.getAttribute("name");
-        let icon = node.hasAttribute("icon") ? node.getAttribute("icon") : node.getAttribute("name");
+		let icon = typeof(this.icons[name]) === "string" ? this.icons[name] : name;
 
         if (type != "item") {
             this.unfocus();
@@ -246,10 +248,10 @@ export class Puzzle {
         let askElem = document.importNode(document.getElementById("dialog-ask").content, true);
         let askItems = askElem.querySelector("items");
         for (let i = 0; i < desire.length; i++) {
-            if (this.mapElement.querySelector("[name='" + desire[i] + "']") == null) continue;
 
             let itemElem = document.importNode(document.getElementById("item").content, true);
-            itemElem.querySelector("img").src = this.mapElement.querySelector("[name='" + desire[i] + "'] img").src;
+			let icon = typeof(this.icons[desire[i]]) === "string" ? this.icons[desire[i]] : desire[i];
+            itemElem.querySelector("img").src = "media/sprites/" + icon + ".svg";
             askItems.appendChild(itemElem);
         }
 
@@ -269,8 +271,9 @@ export class Puzzle {
 
         for (let i = 0; i < holdUpList.length; i++) {
             let holdingElem = document.querySelector("#map td[name=" + holdUpList[i] + "]");
-            let icon = holdingElem.hasAttribute("icon") ? holdingElem.getAttribute("icon") : holdingElem.getAttribute("name");
             let itemElem = document.importNode(document.getElementById("item").content, true);
+			let name = holdingElem.getAttribute("name");
+			let icon = typeof(this.icons[name]) === "string" ? this.icons[name] : name;
             itemElem.querySelector("img").src = 'media/sprites/' + icon + '.svg';
             holdElem.querySelector("items").appendChild(itemElem);
         }
