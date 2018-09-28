@@ -4,3 +4,6 @@
 [submodule "third-party/dialog-polyfill"]
 	path = third-party/dialog-polyfill
 	url = https://github.com/GoogleChrome/dialog-polyfill
+[submodule "third-party/dragdroptouch"]
+	path = third-party/dragdroptouch
+	url = https://github.com/Bernardo-Castilho/dragdroptouch.git
