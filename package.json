@@ -5,7 +5,7 @@
     "orientation": "landscape",
     "nodejs": false,
     "name": "exchanges-puzzle-game",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "app_name": "Exchanges: Puzzle Game",
     "app_name_short": "exchanges-puzzle-game",
     "app_company": "Samuel Sarette",
