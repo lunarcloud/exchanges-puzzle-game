@@ -1,0 +1,6 @@
+[submodule "third-party/screenfull.js"]
+	path = third-party/screenfull.js
+	url = https://github.com/sindresorhus/screenfull.js.git
+[submodule "third-party/dialog-polyfill"]
+	path = third-party/dialog-polyfill
+	url = https://github.com/GoogleChrome/dialog-polyfill
