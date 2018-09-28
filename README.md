@@ -14,7 +14,7 @@ This was an entry for the [Linux Game Jam 2018](https://itch.io/jam/linux-game-j
 Icons were drawn with Krita and exported to SVG, Levels are defined as JSON files.
 There is a script that packages up the game with NWJS, but it's only setup to produce an Ubuntu package file and not for other OSes.
 Since there's only one CSS file and one HTML file, they live at the root, no need for subfolders.
-Polyfills were used for [native HTML dialogs](https://github.com/GoogleChrome/dialog-polyfill) and [fullscreen support](https://github.com/sindresorhus/screenfull.js/).
+Polyfills were used for [mobile drag 'n drop](https://github.com/Bernardo-Castilho/dragdroptouch). [native HTML dialogs](https://github.com/GoogleChrome/dialog-polyfill) and [fullscreen support](https://github.com/sindresorhus/screenfull.js/).
 
 ## Web Features
 This project was an exercise in developing a modern web project with no frameworks and as many useful features as all platforms now support.
