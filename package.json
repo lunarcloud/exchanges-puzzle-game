@@ -11,13 +11,15 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.2",
-    "http-server": "^0.12.3"
+    "lws": "^3.1.0",
+    "lws-index": "^2.0.0",
+    "lws-static": "^2.0.0"
   },
   "scripts": {
     "lint": "eslint",
     "standard": "standard",
     "format": "standard --fix",
-    "start": "http-server"
+    "start": "lws --stack lws-static lws-index"
   },
   "repository": {
     "type": "git",
