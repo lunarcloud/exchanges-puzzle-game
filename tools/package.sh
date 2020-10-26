@@ -17,7 +17,6 @@ cp -r ../README.md ../dist/package-contents/
 cp -r ../LICENSE ../dist/package-contents/
 cp -r ../index.html ../dist/package-contents/
 cp -r ../main.css ../dist/package-contents/
-cp -r ../package.json ../dist/package-contents/
 cp -r ../manifest.webapp ../dist/package-contents/
 cp -r ../js ../dist/package-contents/
 cp -r ../json ../dist/package-contents/

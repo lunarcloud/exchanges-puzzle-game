@@ -2,7 +2,7 @@
   "short_name": "exchanges-puzzle-game",
   "name": "Exchanges: Puzzle Game",
   "description": "Puzzle game of swapping items and meeting character needs.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "icons": [
     {
       "src": "/media/icons/exchanges-puzzle-game-128.png",

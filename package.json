@@ -1,40 +1,40 @@
 {
-    "main": "index.html",
-    "offline_enabled": true,
-    "display": "fullscreen",
-    "orientation": "landscape",
-    "nodejs": false,
-    "name": "exchanges-puzzle-game",
-    "version": "1.0.3",
-    "app_name": "Exchanges: Puzzle Game",
-    "app_name_short": "exchanges-puzzle-game",
-    "app_company": "Samuel Sarette",
-    "app_company_short": "ssarette",
-    "app_description" : "Puzzle game of swapping items and meeting character needs.",
-    "package_maintainer": "Samuel Sarette <samuelsarette@linux.com>",
-    "app_homepage": "https://github.com/lunarcloud/exchanges-puzzle-game",
-    "background_color": "#222222",
-    "theme_color": "#222222",
-    "window": {
-        "title": "Exchanges: Puzzle Game",
-        "position": "center",
-        "fullscreen": false,
-        "transparent": false,
-        "resizable": true,
-        "width": 640,
-        "height": 480,
-        "icon": "media/icons/exchanges-puzzle-game-512.png",
-        "mac_icon": "media/icons/exchanges-puzzle-game-512.png",
-        "exe_icon": "media/icons/exchanges-puzzle-game-512.png"
-    },
-    "webkit": {
-        "plugin": false,
-        "page-cache": false,
-        "java": false
-    },
-    "permissions": [
-      "storage",
-      "pointerLock",
-      "app.window.fullscreen"
+  "name": "exchanges-puzzle-game",
+  "version": "1.0.4",
+  "description": "Puzzle game of swapping items and meeting character needs.",
+  "main": "index.html",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.12.0",
+    "eslint-config-standard": "^15.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.2",
+    "http-server": "^0.12.3"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "standard": "standard",
+    "format": "standard --fix",
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lunarcloud/exchanges-puzzle-game.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "standard": {
+    "ignore": [
+      "/third-party/**/*.js"
     ]
+  },
+  "author": "samuelsarette@linux.com",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/lunarcloud/exchanges-puzzle-game/issues"
+  },
+  "homepage": "https://github.com/lunarcloud/exchanges-puzzle-game#readme"
 }

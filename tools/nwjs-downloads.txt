@@ -1,1 +1,1 @@
-http://dl.nwjs.io/v0.29.3/nwjs-v0.29.3-linux-x64.tar.gz
+https://dl.nwjs.io/v0.49.1/nwjs-v0.49.1-linux-x64.tar.gz

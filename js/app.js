@@ -1,5 +1,5 @@
-import {Menu} from './menu.js';
+import { Menu } from './menu.js'
 
 /* eslint-disable no-unused-vars */
-var menu = new Menu();
+const menu = new Menu()
 /* eslint-enable no-unused-vars */
