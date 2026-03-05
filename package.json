@@ -3,17 +3,13 @@
   "version": "1.0.4",
   "description": "Puzzle game of swapping items and meeting character needs.",
   "main": "index.html",
-  "dependencies": {},
   "devDependencies": {
     "eslint": "^7.26.0",
     "eslint-config-standard": "^15.0.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-standard": "^4.1.0",
-    "lws": "^3.1.0",
-    "lws-index": "^2.0.0",
-    "lws-static": "^2.0.0"
+    "eslint-plugin-standard": "^4.1.0"
   },
   "scripts": {
     "lint": "eslint",
@@ -38,5 +34,9 @@
   "bugs": {
     "url": "https://github.com/lunarcloud/exchanges-puzzle-game/issues"
   },
-  "homepage": "https://github.com/lunarcloud/exchanges-puzzle-game#readme"
+  "homepage": "https://github.com/lunarcloud/exchanges-puzzle-game#readme",
+  "dependencies": {
+    "serve": "^14.2.6",
+    "standard": "^17.1.2"
+  }
 }
